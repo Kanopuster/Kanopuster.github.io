@@ -3,26 +3,24 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Iusup Abduliaparov — CV</title>
+<title>Iusup Abduliaparov - CV</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --bg:     #f5f5f3;
-  --paper:  #ffffff;
-  --line:   #e4e4e2;
-  --line2:  #cacac8;
-  --text:   #1a1a19;
-  --text2:  #2a2a28;
-  --text3:  #3e3e3c;
-  --accent: #1a1a19;
-  --f:      'DM Sans', sans-serif;
-  --mono:   'DM Mono', monospace;
+  --bg: #f5f5f3;
+  --paper: #ffffff;
+  --line: #e4e4e2;
+  --line2: #cacac8;
+  --text: #1a1a19;
+  --text2: #2a2a28;
+  --text3: #3e3e3c;
+  --accent: #284f45;
+  --f: 'DM Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
 }
-
 body {
   background: var(--bg);
   font-family: var(--f);
@@ -30,100 +28,102 @@ body {
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
 }
-
-/* ── TOP BAR ── */
+a { color: inherit; }
 .topbar {
-  position: sticky; top: 0; z-index: 10;
-  display: flex; align-items: center; justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 0 32px;
-  height: 52px;
-  background: rgba(245,245,243,0.9);
+  min-height: 56px;
+  background: rgba(245,245,243,0.92);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
 }
 .topbar-back {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 13px; font-weight: 400;
-  color: var(--text3); text-decoration: none;
-  transition: color 0.15s;
-  letter-spacing: -0.01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: var(--text3);
+  text-decoration: none;
 }
 .topbar-back:hover { color: var(--text); }
-.topbar-actions { display: flex; gap: 10px; }
+.topbar-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
 .btn-dl {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 8px 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 16px;
   background: var(--text);
   color: var(--bg);
-  font-family: var(--f);
-  font-size: 13px; font-weight: 500;
-  border-radius: 980px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 999px;
   text-decoration: none;
-  cursor: pointer; border: none;
-  transition: background 0.18s;
-  letter-spacing: -0.01em;
+  border: 1px solid var(--text);
 }
-.btn-dl:hover { background: #333; }
-
-/* ── PAGE WRAPPER ── */
+.btn-dl.secondary {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--line2);
+}
 .page-wrap {
-  display: flex; justify-content: center;
+  display: flex;
+  justify-content: center;
   padding: 40px 24px 80px;
 }
-
-/* ── CV PAPER ── */
 .cv-paper {
   background: var(--paper);
   width: 100%;
-  max-width: 760px;
+  max-width: 820px;
   border: 1px solid var(--line);
   border-radius: 12px;
   box-shadow: 0 4px 32px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
   overflow: hidden;
 }
-
-/* ── CV HEADER ── */
 .cv-header {
-  padding: 44px 52px 36px;
+  padding: 46px 54px 36px;
   border-bottom: 1px solid var(--line);
 }
 .cv-name {
-  font-size: 32px; font-weight: 300;
-  letter-spacing: -0.03em;
+  font-size: 34px;
+  font-weight: 300;
+  letter-spacing: -0.035em;
   line-height: 1.1;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 .cv-title {
-  font-size: 15px; font-weight: 400;
+  font-size: 16px;
   color: var(--text2);
-  letter-spacing: -0.01em;
-  margin-bottom: 20px;
+  letter-spacing: -0.015em;
+  margin-bottom: 22px;
   line-height: 1.5;
 }
 .cv-meta {
-  display: flex; flex-wrap: wrap; gap: 6px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
 }
 .cv-meta-item {
   font-family: var(--mono);
-  font-size: 11px; font-weight: 300;
+  font-size: 11px;
   color: var(--text3);
   letter-spacing: 0.02em;
-  display: flex; align-items: center; gap: 5px;
 }
 .cv-meta-item a {
-  color: var(--text3); text-decoration: none;
-  transition: color 0.15s;
+  color: var(--text3);
+  text-decoration: none;
 }
 .cv-meta-item a:hover { color: var(--text); }
-
-/* ── CV BODY ── */
-.cv-body { padding: 0 52px 44px; }
-
-/* ── SECTION ── */
-.cv-section { padding: 28px 0 0; }
+.cv-body { padding: 0 54px 46px; }
+.cv-section { padding: 30px 0 0; }
 .cv-section-title {
   font-family: var(--mono);
-  font-size: 10px; font-weight: 400;
+  font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text3);
@@ -131,344 +131,252 @@ body {
   padding-bottom: 8px;
   border-bottom: 1px solid var(--line);
 }
-
-/* ── PROFILE ── */
 .cv-profile {
-  font-size: 15px; font-weight: 400;
+  font-size: 15px;
   color: var(--text2);
-  line-height: 1.7;
+  line-height: 1.72;
   letter-spacing: -0.01em;
 }
-
-/* ── EXPERIENCE ITEM ── */
-.cv-exp { margin-bottom: 22px; }
+.cv-exp { margin-bottom: 26px; }
 .cv-exp:last-child { margin-bottom: 0; }
 .cv-exp-header {
-  display: flex; justify-content: space-between;
-  align-items: baseline; gap: 12px;
-  margin-bottom: 2px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
   flex-wrap: wrap;
+  margin-bottom: 3px;
 }
 .cv-exp-role {
-  font-size: 15px; font-weight: 500;
+  font-size: 15px;
+  font-weight: 500;
   color: var(--text);
   letter-spacing: -0.015em;
 }
 .cv-exp-date {
   font-family: var(--mono);
-  font-size: 11px; font-weight: 300;
+  font-size: 11px;
   color: var(--text3);
   white-space: nowrap;
-  letter-spacing: 0.02em;
 }
 .cv-exp-company {
-  font-size: 14px; font-weight: 400;
+  font-size: 14px;
   color: var(--text3);
   margin-bottom: 10px;
   letter-spacing: -0.01em;
 }
 .cv-exp-points {
   list-style: none;
-  display: flex; flex-direction: column; gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 .cv-exp-points li {
-  font-size: 14px; font-weight: 400;
+  font-size: 14px;
   color: var(--text2);
   line-height: 1.6;
   letter-spacing: -0.01em;
-  padding-left: 14px;
+  padding-left: 15px;
   position: relative;
 }
 .cv-exp-points li::before {
-  content: '–';
-  position: absolute; left: 0;
-  color: var(--text3);
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
 }
 .cv-exp-tech {
-  display: flex; flex-wrap: wrap; gap: 5px;
-  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 12px;
 }
 .tech-pill {
   font-family: var(--mono);
-  font-size: 10px; font-weight: 300;
-  padding: 2px 7px; border-radius: 3px;
+  font-size: 10px;
+  padding: 3px 7px;
+  border-radius: 4px;
   background: #f3f3f2;
   color: var(--text3);
   border: 1px solid var(--line);
   letter-spacing: 0.03em;
 }
-
-/* ── SKILLS GRID ── */
 .cv-skills {
   display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 0;
+  grid-template-columns: 140px 1fr;
 }
-.cv-skill-row {
-  display: contents;
-}
+.cv-skill-row { display: contents; }
 .cv-skill-label {
   font-family: var(--mono);
-  font-size: 11px; font-weight: 300;
+  font-size: 11px;
   color: var(--text3);
   letter-spacing: 0.04em;
-  padding: 10px 16px 10px 0;
+  padding: 11px 16px 11px 0;
   border-top: 1px solid var(--line);
 }
 .cv-skill-val {
-  font-size: 14px; font-weight: 400;
+  font-size: 14px;
   color: var(--text2);
-  letter-spacing: -0.01em;
-  padding: 10px 0;
+  padding: 11px 0;
   border-top: 1px solid var(--line);
-  line-height: 1.5;
+  line-height: 1.55;
+  letter-spacing: -0.01em;
 }
-
-/* ── EDUCATION ── */
 .cv-edu {
-  display: flex; justify-content: space-between; align-items: baseline;
-  gap: 12px; flex-wrap: wrap;
-  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 0;
   border-top: 1px solid var(--line);
 }
 .cv-edu:last-child { border-bottom: 1px solid var(--line); }
-.cv-edu-left {}
 .cv-edu-degree {
-  font-size: 15px; font-weight: 500;
-  color: var(--text);
+  font-size: 15px;
+  font-weight: 500;
   letter-spacing: -0.015em;
   margin-bottom: 2px;
 }
 .cv-edu-school {
-  font-size: 13.5px; font-weight: 400;
+  font-size: 14px;
   color: var(--text3);
-  letter-spacing: -0.01em;
 }
 .cv-edu-date {
   font-family: var(--mono);
-  font-size: 11px; font-weight: 300;
+  font-size: 11px;
   color: var(--text3);
   white-space: nowrap;
 }
-
-@media (max-width: 600px) {
-  .cv-header { padding: 28px 24px 24px; }
+@media print {
+  body { background: #fff; }
+  .topbar { display: none; }
+  .page-wrap { padding: 0; }
+  .cv-paper { max-width: none; border: none; border-radius: 0; box-shadow: none; }
+  .cv-header { padding: 28px 34px 22px; }
+  .cv-body { padding: 0 34px 30px; }
+  .cv-section { padding-top: 20px; }
+}
+@media (max-width: 680px) {
+  .topbar { padding: 10px 14px; align-items: flex-start; gap: 12px; }
+  .page-wrap { padding: 20px 14px 54px; }
+  .cv-header { padding: 30px 24px 26px; }
   .cv-body { padding: 0 24px 32px; }
-  .topbar { padding: 0 16px; }
-  .cv-name { font-size: 24px; }
+  .cv-name { font-size: 30px; }
   .cv-skills { grid-template-columns: 1fr; }
-  .cv-skill-label { border-top: none; padding-bottom: 2px; }
+  .cv-skill-label { padding-bottom: 2px; }
+  .cv-skill-val { border-top: none; padding-top: 0; }
 }
-
-/* ── DARK THEME ── */
-[data-theme="dark"] {
-  --bg:     #111110;
-  --paper:  #1a1a18;
-  --line:   #2e2e2b;
-  --line2:  #3e3e3b;
-  --text:   #f2f2ef;
-  --text2:  #d4d4ce;
-  --text3:  #a8a8a2;
-  --accent: #f2f2ef;
-}
-[data-theme="dark"] nav,
-[data-theme="dark"] .topbar {
-  background: rgba(17,17,16,0.92);
-  border-bottom-color: #2e2e2b;
-}
-[data-theme="dark"] .cv-paper {
-  box-shadow: 0 4px 32px rgba(0,0,0,0.4);
-  border-color: #2e2e2b;
-}
-[data-theme="dark"] .tech-pill {
-  background: #252523;
-  border-color: #3e3e3b;
-  color: #a8a8a2;
-}
-body { transition: background-color 0.3s ease, color 0.3s ease; }
-
-.theme-btn {
-  display: flex; align-items: center; justify-content: center;
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  border: 1px solid var(--line2);
-  background: transparent;
-  cursor: pointer;
-  color: var(--text3);
-  font-size: 14px;
-  transition: all 0.18s;
-}
-.theme-btn:hover { background: var(--bg); color: var(--text); border-color: #999; }
 </style>
-
-<script>
-  (function() {
-    const stored = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = stored || (prefersDark ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', theme);
-    document.addEventListener('DOMContentLoaded', function() {
-      const btn = document.getElementById('theme-btn');
-      if (btn) btn.textContent = theme === 'dark' ? '☀' : '☽';
-    });
-  })();
-  function toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme') || 'light';
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    const btn = document.getElementById('theme-btn');
-    if (btn) btn.textContent = next === 'dark' ? '☀' : '☽';
-  }
-</script>
 </head>
 <body>
-
-<!-- TOP BAR -->
 <div class="topbar">
-  <a class="topbar-back" href="Portfolio.html">← Portfolio</a>
+  <a class="topbar-back" href="index.html">Back to portfolio</a>
   <div class="topbar-actions">
-    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">☽</button>
-    <a class="btn-dl" href="uploads/Iusup_Abduliaparov_CV_Simulation_ATS_HR_clean.docx" download="Iusup_Abduliaparov_CV.docx">↓ Download CV</a>
+    <a class="btn-dl secondary" href="javascript:window.print()">Print / PDF</a>
+    <a class="btn-dl" href="Iusup_Abduliaparov_CV_Simulation_v2_ATS.docx" download>Download DOCX</a>
   </div>
 </div>
 
-<!-- CV PAPER -->
 <div class="page-wrap">
-  <div class="cv-paper">
-
-    <!-- HEADER -->
-    <div class="cv-header">
+  <article class="cv-paper">
+    <header class="cv-header">
       <div class="cv-name">Iusup Abduliaparov</div>
-      <div class="cv-title">Unity / C# Real-Time Simulation Engineer · Interactive 3D · URP / WebGL Performance</div>
+      <div class="cv-title">Unity C# Engineer | Simulation, WebGL and Real-Time 3D Applications</div>
       <div class="cv-meta">
-        <span class="cv-meta-item">📍 Milan, Italy · Open to Remote</span>
-        <span class="cv-meta-item"><a href="/cdn-cgi/l/email-protection#6d14181e181d430c0f091801140c1d0c1f021b2d0a000c0401430e0200"><span class="__cf_email__" data-cfemail="7b020e080e0b551a191f0e17021a0b1a09140d3b1c161a121755181416">[email&#160;protected]</span></a></span>
+        <span class="cv-meta-item">Milan, Italy / Open to hybrid and remote</span>
+        <span class="cv-meta-item"><a href="mailto:yusup.abdulyaparov@gmail.com">yusup.abdulyaparov@gmail.com</a></span>
         <span class="cv-meta-item">+39 351 443 2325</span>
-        <span class="cv-meta-item"><a href="https://linkedin.com/in/iusup-abduliaparov" target="_blank">linkedin.com/in/iusup-abduliaparov</a></span>
-        <span class="cv-meta-item"><a href="https://github.com/Kanopuser" target="_blank">github.com/Kanopuser</a></span>
-        <span class="cv-meta-item">English C1 · Russian Native</span>
+        <span class="cv-meta-item"><a href="https://linkedin.com/in/iusup-abduliaparov">linkedin.com/in/iusup-abduliaparov</a></span>
+        <span class="cv-meta-item"><a href="https://github.com/Kanopuster">github.com/Kanopuster</a></span>
+        <span class="cv-meta-item">English C1 / Russian Native</span>
       </div>
-    </div>
+    </header>
 
-    <!-- BODY -->
     <div class="cv-body">
-
-      <!-- PROFILE -->
-      <div class="cv-section">
+      <section class="cv-section">
         <div class="cv-section-title">Profile</div>
-        <p class="cv-profile">
-          Unity/C# Engineer with 3 years of production experience building real-time 3D systems for WebGL, mobile, and simulation.
-          Strong in modular C# architecture, custom URP rendering, physics-driven interaction, and performance/build-size optimization.
-          Currently developing a medical angiography training simulator, with previous production work on Unity applications used by 9M+ users.
-        </p>
-      </div>
+        <p class="cv-profile">I build interactive training and visualization systems with strong attention to architecture, performance and production constraints. Recent work includes a medical angiography simulator with real-time X-ray-style rendering, catheter interaction, procedural workflow logic and a hardware-oriented C-arm control layer. Previously shipped and optimized a high-traffic Unity WebGL product with 9M+ users.</p>
+      </section>
 
-      <!-- EXPERIENCE -->
-      <div class="cv-section">
+      <section class="cv-section">
         <div class="cv-section-title">Experience</div>
 
         <div class="cv-exp">
           <div class="cv-exp-header">
-            <span class="cv-exp-role">Unity Engineer (Contract) — Medical Simulation / Angiography Training System</span>
-            <span class="cv-exp-date">2025 – Present</span>
+            <span class="cv-exp-role">Unity Simulation Engineer - Medical Training Simulator (NDA)</span>
+            <span class="cv-exp-date">2025 - Present</span>
           </div>
-          <div class="cv-exp-company">Real-time 3D simulator for vascular catheterization training</div>
+          <div class="cv-exp-company">Angiography training simulator</div>
           <ul class="cv-exp-points">
-            <li>Built a custom URP X-ray visualization pipeline with density accumulation, compositing, shader-driven image effects, and integrated instrument rendering</li>
-            <li>Implemented guidewire/catheter navigation with proximal-end input control, centerline path following, branch selection at bifurcations, and collision constraints against vessel meshes</li>
-            <li>Developed balloon inflation and vessel expansion workflows using per-particle radius modulation, blendshape-driven vessel response, and shader-driven contrast-flow animation over a vessel graph</li>
-            <li>Created reusable instrument definitions and runtime switching with ScriptableObject blueprints, slot-based management, and Obi collision filtering</li>
+            <li>Building core Unity systems for an angiography training simulator covering X-ray-style visualization, guidewire and catheter interaction, contrast injection, C-arm operation and balloon/stent procedure logic.</li>
+            <li>Worked with clinical reviewers to convert procedure requirements into simulator states, validation rules and instrument profiles.</li>
+            <li>Built a real-time URP X-ray-style rendering pipeline using density accumulation, multi-pass composition and instrument overlays.</li>
+            <li>Implemented guidewire and catheter interaction, proximal-end actuation and bifurcation handling, supporting 8 instrument profiles without per-instrument code branches.</li>
+            <li>Developed a procedural balloon/stent workflow with radius control, vessel deformation, state validation and deployment gating based on positioning and inflation state.</li>
+            <li>Designed a hardware-abstraction layer for C-arm controls, separating simulator logic from input devices and preparing the system for future physical rig integration.</li>
+            <li>Built a ScriptableObject-driven instrument framework for collision settings, X-ray layer mapping and reusable rig slots, allowing new instrument profiles to be added through configuration rather than code.</li>
           </ul>
           <div class="cv-exp-tech">
-            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">URP</span><span class="tech-pill">Obi Rope/Rod</span><span class="tech-pill">Burst</span><span class="tech-pill">Custom Render Features</span><span class="tech-pill">ScriptableObjects</span><span class="tech-pill">Procedural Meshes</span>
+            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">URP</span><span class="tech-pill">ShaderLab/HLSL</span><span class="tech-pill">Burst</span><span class="tech-pill">Custom Render Features</span><span class="tech-pill">ScriptableObjects</span><span class="tech-pill">Procedural Meshes</span>
           </div>
         </div>
 
         <div class="cv-exp">
           <div class="cv-exp-header">
-            <span class="cv-exp-role">Unity Engineer / Co-Founder — Aviana Studios</span>
-            <span class="cv-exp-date">Dec 2024 – Present</span>
+            <span class="cv-exp-role">Unity Engineer - Aviana Studios, WebGL and Mobile Products</span>
+            <span class="cv-exp-date">2023 - Present</span>
           </div>
-          <div class="cv-exp-company">Small studio delivering Unity-based mobile and WebGL applications</div>
+          <div class="cv-exp-company">Engineering owner and co-founder</div>
           <ul class="cv-exp-points">
-            <li>Built reusable Unity application architecture: ScriptableObject systems, event buses, object pooling, Addressables-based content delivery, and SDK abstraction</li>
-            <li>Improved WebGL startup time and package size through asset stripping, texture/audio compression, code stripping, and ShaderVariantCollection management</li>
-            <li>Shipped 8 mobile/WebGL applications; built editor tools and content pipelines; coordinated implementation work across programmers, design, and art</li>
+            <li>Co-founded a Unity studio and owned engineering for high-traffic Unity WebGL/mobile products, including browser and Android game applications and performance optimization.</li>
+            <li>Reduced WebGL build size from 100 MB to 20 MB through shader variant scoping, asset stripping and texture/audio re-encoding, improving accessibility for low-bandwidth browser users.</li>
+            <li>Improved low-end Android performance from around 15 FPS to stable 60 FPS through GC allocation reduction, pooling, batching, physics-step tuning and profiler-driven optimization.</li>
+            <li>Designed a reusable Unity architecture with DI, hierarchical state machines, ScriptableObject configuration, save-system abstraction, Addressables and SDK abstraction.</li>
+            <li>Built Unity Editor tooling for asset import, ScriptableObject authoring and pre-build validation, reducing content setup time and preventing recurring release issues.</li>
+            <li>Supported production releases across WebGL and mobile platforms under strict performance, memory and build-size constraints.</li>
           </ul>
           <div class="cv-exp-tech">
-            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">URP</span><span class="tech-pill">Addressables</span><span class="tech-pill">WebGL</span><span class="tech-pill">Mobile Profiling</span><span class="tech-pill">Editor Tooling</span>
+            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">Zenject</span><span class="tech-pill">UniRx</span><span class="tech-pill">UniTask</span><span class="tech-pill">Addressables</span><span class="tech-pill">WebGL/Mobile Profiling</span><span class="tech-pill">Editor Tooling</span>
           </div>
         </div>
+      </section>
 
-        <div class="cv-exp">
-          <div class="cv-exp-header">
-            <span class="cv-exp-role">Lead Unity Developer / Co-Founder — Mega Ramp Stunt</span>
-            <span class="cv-exp-date">2023 – 2024</span>
-          </div>
-          <div class="cv-exp-company">Mobile & WebGL Product · 9M+ users</div>
-          <ul class="cv-exp-points">
-            <li>Designed and implemented core production systems, including a physics-based vehicle simulation controller used as the project's technical foundation</li>
-            <li>Optimized low-end mobile and WebGL performance by tuning object pooling, draw calls, GC allocations, physics update frequency, and asset budgets</li>
-            <li>Integrated third-party SDKs for mediation, analytics, platform services, and release compliance; supported publisher build pipelines</li>
-            <li>Delivered live updates based on product metrics; conducted technical interviews and onboarded developers as the team scaled</li>
-          </ul>
-          <div class="cv-exp-tech">
-            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">Mobile</span><span class="tech-pill">WebGL</span><span class="tech-pill">SDK Integrations</span><span class="tech-pill">Analytics</span><span class="tech-pill">WebGL Shaders</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- SKILLS -->
-      <div class="cv-section">
-        <div class="cv-section-title">Core Skills</div>
+      <section class="cv-section">
+        <div class="cv-section-title">Core Stack</div>
         <div class="cv-skills">
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Engine</div>
-            <div class="cv-skill-val">C#, Unity (3+ years), URP, Addressables, WebGL</div>
-          </div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Rendering</div>
-            <div class="cv-skill-val">Custom URP render features, ShaderLab/HLSL, render passes, image-effect compositing, WebGL shaders</div>
-          </div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Physics</div>
-            <div class="cv-skill-val">Obi Rope/Rod, ConfigurableJoints, guidewire/catheter simulation, multi-rigidbody systems, procedural meshes</div>
-          </div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Performance</div>
-            <div class="cv-skill-val">WebGL/mobile profiling, build-size optimization, GC allocation reduction, draw-call/batching analysis, code/asset stripping</div>
-          </div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Architecture</div>
-            <div class="cv-skill-val">Event-driven systems, ScriptableObject modular design, editor tooling, SDK abstraction, Git/build pipelines</div>
-          </div>
+          <div class="cv-skill-row"><div class="cv-skill-label">Engine & Languages</div><div class="cv-skill-val">C#, Unity, URP</div></div>
+          <div class="cv-skill-row"><div class="cv-skill-label">Architecture</div><div class="cv-skill-val">SOLID, dependency injection, Zenject, lightweight custom context layer, hierarchical state machines, ScriptableObject-driven configuration, reactive event systems, save-system abstraction</div></div>
+          <div class="cv-skill-row"><div class="cv-skill-label">Rendering</div><div class="cv-skill-val">Custom URP render features and passes, image-effect composition, X-ray-style visualization, WebGL shader budgeting, ShaderVariantCollection management</div></div>
+          <div class="cv-skill-row"><div class="cv-skill-label">Physics & Simulation</div><div class="cv-skill-val">ConfigurableJoints, guidewire/catheter simulation, multi-rigidbody systems, procedural meshes, blendshape-driven deformation</div></div>
+          <div class="cv-skill-row"><div class="cv-skill-label">Performance</div><div class="cv-skill-val">Unity Profiler, Memory Profiler, GC allocation reduction, draw-call analysis and batching, WebGL build-size optimization, low-end Android profiling</div></div>
+          <div class="cv-skill-row"><div class="cv-skill-label">Production Tooling</div><div class="cv-skill-val">Addressables, editor tooling, content pipelines, build pipelines, pre-build validation, Git, code review, mentoring</div></div>
         </div>
-      </div>
+      </section>
 
-      <!-- EDUCATION -->
-      <div class="cv-section">
+      <section class="cv-section">
         <div class="cv-section-title">Education</div>
         <div class="cv-edu">
-          <div class="cv-edu-left">
+          <div>
             <div class="cv-edu-degree">BSc Economics &amp; Management</div>
-            <div class="cv-edu-school">Università Cattolica del Sacro Cuore, Milan</div>
+            <div class="cv-edu-school">Universita Cattolica del Sacro Cuore, Milan</div>
           </div>
-          <div class="cv-edu-date">2024 – Present</div>
+          <div class="cv-edu-date">2024 - Present</div>
         </div>
         <div class="cv-edu">
-          <div class="cv-edu-left">
-            <div class="cv-edu-degree">Automation &amp; Control Systems (incomplete, transferred)</div>
+          <div>
+            <div class="cv-edu-degree">Automation &amp; Control Systems</div>
             <div class="cv-edu-school">Ufa State Petroleum Tech. University</div>
           </div>
-          <div class="cv-edu-date">2022 – 2024</div>
+          <div class="cv-edu-date">2022 - 2024</div>
         </div>
-      </div>
-
-    </div><!-- /cv-body -->
-  </div><!-- /cv-paper -->
-</div><!-- /page-wrap -->
-
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+      </section>
+    </div>
+  </article>
+</div>
+</body>
 </html>
