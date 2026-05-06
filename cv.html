@@ -167,6 +167,32 @@ body {
   margin-bottom: 10px;
   letter-spacing: -0.01em;
 }
+.cv-exp-subhead {
+  display: flex; justify-content: space-between;
+  align-items: baseline; gap: 12px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+.cv-exp-subrole {
+  font-size: 14px; font-weight: 500;
+  color: var(--text2);
+  letter-spacing: -0.01em;
+}
+.cv-exp-loc {
+  font-family: var(--mono);
+  font-size: 11px; font-weight: 300;
+  color: var(--text3);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+.cv-exp-blurb {
+  font-size: 13.5px; font-weight: 400;
+  color: var(--text3);
+  font-style: italic;
+  line-height: 1.55;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
 .cv-exp-points {
   list-style: none;
   display: flex; flex-direction: column; gap: 5px;
@@ -340,97 +366,106 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
     <!-- HEADER -->
     <div class="cv-header">
       <div class="cv-name">Iusup Abduliaparov</div>
-      <div class="cv-title">Unity C# Engineer · Simulation, WebGL & Real-Time 3D Applications</div>
+      <div class="cv-title">Unity C# Engineer | Simulation, WebGL and Real-Time 3D Applications</div>
       <div class="cv-meta">
-        <span class="cv-meta-item">📍 Milan, Italy · Open to Remote</span>
+        <span class="cv-meta-item">Milan, Italy</span>
         <span class="cv-meta-item"><a href="mailto:yusup.abdulyaparov@gmail.com">yusup.abdulyaparov@gmail.com</a></span>
         <span class="cv-meta-item">+39 351 443 2325</span>
-        <span class="cv-meta-item"><a href="https://linkedin.com/in/iusup-abduliaparov" target="_blank">linkedin.com/in/iusup-abduliaparov</a></span>
-        <span class="cv-meta-item"><a href="https://github.com/Kanopuster" target="_blank">github.com/Kanopuster</a></span>
-        <span class="cv-meta-item">English C1 · Russian Native</span>
+        <span class="cv-meta-item"><a href="https://kanopuster.github.io/" target="_blank">Portfolio</a></span>
+        <span class="cv-meta-item"><a href="https://www.linkedin.com/in/iusup-abduliaparov-85b30b30a/" target="_blank">LinkedIn</a></span>
       </div>
     </div>
 
     <!-- BODY -->
     <div class="cv-body">
 
-      <!-- PROFILE -->
+      <!-- PROFESSIONAL SUMMARY -->
       <div class="cv-section">
-        <div class="cv-section-title">Profile</div>
+        <div class="cv-section-title">Professional Summary</div>
         <p class="cv-profile">
           I build interactive training and visualization systems with strong attention to architecture, performance and production constraints. Recent work includes a medical angiography simulator with real-time X-ray-style rendering, catheter interaction, procedural workflow logic and a hardware-oriented C-arm control layer. Previously shipped and optimized a high-traffic Unity WebGL product with 9M+ users.
         </p>
       </div>
 
-      <!-- EXPERIENCE -->
+      <!-- WORK EXPERIENCE -->
       <div class="cv-section">
-        <div class="cv-section-title">Experience</div>
+        <div class="cv-section-title">Work Experience</div>
 
         <div class="cv-exp">
           <div class="cv-exp-header">
-            <span class="cv-exp-role">Unity Simulation Engineer — Medical Training Simulator (NDA)</span>
+            <span class="cv-exp-role">Medical Training Simulator (NDA)</span>
+            <span class="cv-exp-loc">Remote (contract)</span>
+          </div>
+          <div class="cv-exp-subhead">
+            <span class="cv-exp-subrole">Unity Simulation Engineer</span>
             <span class="cv-exp-date">2025 – Present</span>
           </div>
-          <div class="cv-exp-company">Building core Unity systems for an angiography training simulator</div>
+          <div class="cv-exp-blurb">Building core Unity systems for an angiography training simulator covering X-ray-style visualization, guidewire and catheter interaction, contrast injection, C-arm operation and balloon/stent procedure logic.</div>
           <ul class="cv-exp-points">
-            <li>Real-time URP X-ray-style rendering pipeline — density accumulation, multi-pass composition and instrument overlays</li>
-            <li>Guidewire and catheter interaction — proximal-end actuation and bifurcation handling, supporting 8 instrument profiles without per-instrument code branches</li>
-            <li>Procedural balloon/stent workflow — radius control, vessel deformation, state validation and deployment gating based on positioning and inflation state</li>
-            <li>Hardware-abstraction layer for C-arm controls — separating simulator logic from input devices, preparing for physical rig integration</li>
-            <li>ScriptableObject-driven instrument framework — collision settings, X-ray layer mapping and reusable rig slots; new profiles via configuration, not code</li>
+            <li>Worked with clinical reviewers to convert procedure requirements into simulator states, validation rules and instrument profiles.</li>
+            <li>Built a <strong>real-time URP X-ray-style rendering pipeline</strong> using density accumulation, multi-pass composition and instrument overlays.</li>
+            <li>Implemented <strong>guidewire and catheter interaction</strong>, proximal-end actuation and bifurcation handling, supporting 8 instrument profiles without per-instrument code branches.</li>
+            <li>Developed a <strong>procedural balloon/stent workflow</strong> with radius control, vessel deformation, state validation and deployment gating based on positioning and inflation state.</li>
+            <li>Designed a <strong>hardware-abstraction layer for C-arm controls</strong>, separating simulator logic from input devices and preparing the system for future physical rig integration.</li>
+            <li>Built a <strong>ScriptableObject-driven instrument framework</strong> for collision settings, X-ray layer mapping and reusable rig slots, allowing new instrument profiles to be added through configuration rather than code.</li>
           </ul>
           <div class="cv-exp-tech">
-            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">URP</span><span class="tech-pill">Burst</span><span class="tech-pill">ScriptableObjects</span><span class="tech-pill">Procedural Meshes</span>
+            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">URP</span><span class="tech-pill">ShaderLab/HLSL</span><span class="tech-pill">Burst</span><span class="tech-pill">Custom Render Features</span><span class="tech-pill">ScriptableObjects</span><span class="tech-pill">Procedural Meshes</span>
           </div>
         </div>
 
         <div class="cv-exp">
           <div class="cv-exp-header">
-            <span class="cv-exp-role">Unity Engineer / Co-Founder — Aviana Studios</span>
-            <span class="cv-exp-date">2023 – Present</span>
+            <span class="cv-exp-role">Aviana Studios, WebGL and Mobile Products</span>
+            <span class="cv-exp-loc">Remote</span>
           </div>
-          <div class="cv-exp-company">WebGL & Mobile Products · Engineering owner</div>
+          <div class="cv-exp-subhead">
+            <span class="cv-exp-subrole">Unity Engineer | Engineering Owner and Co-founder</span>
+            <span class="cv-exp-date">2023 – 2026</span>
+          </div>
+          <div class="cv-exp-blurb">Owned Unity engineering for high-traffic WebGL and Android real-time applications, focusing on architecture, runtime performance, build size, release stability and production tooling.</div>
           <ul class="cv-exp-points">
-            <li>Reduced WebGL build size from <strong>100 MB → 20 MB</strong> through shader variant scoping, asset stripping and texture/audio re-encoding</li>
-            <li>Improved low-end Android performance from <strong>~15 FPS → stable 60 FPS</strong> via GC reduction, pooling, batching and physics-step tuning</li>
-            <li>Reusable Unity architecture: DI (Zenject), hierarchical state machines, ScriptableObject configuration, Addressables, SDK abstraction</li>
-            <li>Editor tooling for asset import, ScriptableObject authoring and pre-build validation — reducing setup time and preventing release issues</li>
-            <li>Optimized environment geometry from <strong>~1M → ~40k triangles</strong> on a mobile prototype via mesh decimation, LODs and silhouette-preserving proxies</li>
+            <li>Reduced WebGL build size from <strong>100 MB to 20 MB</strong> through shader variant scoping, asset stripping and texture/audio re-encoding, improving accessibility for low-bandwidth browser users.</li>
+            <li>Improved low-end Android performance from <strong>~15 FPS to stable 60 FPS</strong> through GC allocation reduction, pooling, batching, physics-step tuning and profiler-driven optimization.</li>
+            <li>Designed a <strong>reusable Unity architecture</strong> with DI, hierarchical state machines, ScriptableObject configuration, save-system abstraction, Addressables and SDK abstraction.</li>
+            <li>Built <strong>Unity Editor tooling</strong> for asset import, ScriptableObject authoring and pre-build validation, reducing content setup time and preventing recurring release issues.</li>
+            <li>Supported production releases across WebGL and mobile platforms under strict performance, memory and build-size constraints.</li>
+            <li>Optimized environment geometry from <strong>~1M to ~40k triangles</strong> on a mobile prototype via mesh decimation, LODs and silhouette-preserving proxies.</li>
           </ul>
           <div class="cv-exp-tech">
-            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">Zenject</span><span class="tech-pill">UniRx</span><span class="tech-pill">UniTask</span><span class="tech-pill">Addressables</span><span class="tech-pill">WebGL</span><span class="tech-pill">Android</span><span class="tech-pill">Editor Tooling</span><span class="tech-pill">Mesh Optimization</span>
+            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">Zenject</span><span class="tech-pill">UniRx</span><span class="tech-pill">UniTask</span><span class="tech-pill">Addressables</span><span class="tech-pill">WebGL/mobile profiling</span><span class="tech-pill">Editor Tooling</span>
           </div>
         </div>
 
       </div>
 
-      <!-- SKILLS -->
+      <!-- TECHNICAL SKILLS -->
       <div class="cv-section">
-        <div class="cv-section-title">Core Skills</div>
+        <div class="cv-section-title">Technical Skills</div>
         <div class="cv-skills">
           <div class="cv-skill-row">
-            <div class="cv-skill-label">Engine</div>
-            <div class="cv-skill-val">C#, Unity, URP, Addressables, WebGL</div>
+            <div class="cv-skill-label">Engine &amp; Languages</div>
+            <div class="cv-skill-val">C#, Unity, URP</div>
           </div>
           <div class="cv-skill-row">
             <div class="cv-skill-label">Architecture</div>
-            <div class="cv-skill-val">SOLID, DI (Zenject), hierarchical state machines, ScriptableObject config, reactive event systems (UniRx), UniTask, save-system abstraction</div>
+            <div class="cv-skill-val">SOLID, dependency injection, Zenject, lightweight custom context layer, hierarchical state machines, ScriptableObject-driven configuration, reactive event systems, save-system abstraction</div>
           </div>
           <div class="cv-skill-row">
             <div class="cv-skill-label">Rendering</div>
-            <div class="cv-skill-val">Custom URP render features, ShaderLab/HLSL, image-effect composition, X-ray-style visualization, WebGL shader budgeting, ShaderVariantCollection</div>
+            <div class="cv-skill-val">custom URP render features and passes, image-effect composition, X-ray-style visualization, WebGL shader budgeting, ShaderVariantCollection management</div>
           </div>
           <div class="cv-skill-row">
-            <div class="cv-skill-label">Physics & Sim</div>
-            <div class="cv-skill-val">ConfigurableJoints, guidewire/catheter simulation, multi-rigidbody systems, procedural meshes, blendshape deformation</div>
+            <div class="cv-skill-label">Physics &amp; Simulation</div>
+            <div class="cv-skill-val">ConfigurableJoints, guidewire/catheter simulation, multi-rigidbody systems, procedural meshes, blendshape-driven deformation</div>
           </div>
           <div class="cv-skill-row">
             <div class="cv-skill-label">Performance</div>
-            <div class="cv-skill-val">Unity Profiler, Memory Profiler, GC allocation reduction, draw-call batching, WebGL build-size optimization, low-end Android profiling</div>
+            <div class="cv-skill-val">Unity Profiler, Memory Profiler, GC allocation reduction, draw-call analysis and batching, WebGL build-size optimization, low-end Android profiling</div>
           </div>
           <div class="cv-skill-row">
-            <div class="cv-skill-label">Production</div>
-            <div class="cv-skill-val">Editor tooling, content pipelines, pre-build validation, Git, code review, mentoring</div>
+            <div class="cv-skill-label">Production Tooling</div>
+            <div class="cv-skill-val">Addressables, editor tooling, content pipelines, build pipelines, pre-build validation, Git, code review, mentoring</div>
           </div>
         </div>
       </div>
@@ -440,15 +475,15 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
         <div class="cv-section-title">Education</div>
         <div class="cv-edu">
           <div class="cv-edu-left">
-            <div class="cv-edu-degree">BSc Economics &amp; Management</div>
-            <div class="cv-edu-school">Università Cattolica del Sacro Cuore, Milan</div>
+            <div class="cv-edu-degree">Università Cattolica del Sacro Cuore</div>
+            <div class="cv-edu-school">BSc Economics &amp; Management · Milan, Italy</div>
           </div>
           <div class="cv-edu-date">2024 – Present</div>
         </div>
         <div class="cv-edu">
           <div class="cv-edu-left">
-            <div class="cv-edu-degree">Automation &amp; Control Systems</div>
-            <div class="cv-edu-school">Ufa State Petroleum Tech. University</div>
+            <div class="cv-edu-degree">Ufa State Petroleum Tech. University</div>
+            <div class="cv-edu-school">Automation &amp; Control Systems · Ufa, Russia</div>
           </div>
           <div class="cv-edu-date">2022 – 2024</div>
         </div>
