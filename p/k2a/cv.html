@@ -384,7 +384,7 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
       <div class="cv-section">
         <div class="cv-section-title">Professional Summary</div>
         <p class="cv-profile">
-          I build interactive real-time 3D and WebGL applications with strong attention to architecture, performance and production constraints. Shipped and optimized a high-traffic Unity WebGL product with 9M+ users, ported a viral Steam survival title to mobile under publisher contract, and own end-to-end engineering across architecture, rendering, performance and release stability.
+          Unity developer with 3 years of production experience shipping real-time 3D applications to WebGL game portals (Playgama, Yandex Games) and Android. Owned end-to-end engineering for nine WebGL titles built on a shared codebase and a high-traffic mobile product reaching 9M+ users. Focused on architecture, runtime performance and release stability under strict mobile-browser memory and build-size budgets.
         </p>
       </div>
 
@@ -401,17 +401,17 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
             <span class="cv-exp-subrole">Unity Developer | Engineering Owner and Co-founder</span>
             <span class="cv-exp-date">2023 – 2026</span>
           </div>
-          <div class="cv-exp-blurb">Owned Unity engineering for high-traffic WebGL and Android real-time applications, focusing on architecture, runtime performance, build size, release stability and production tooling.</div>
+          <div class="cv-exp-blurb">Owned Unity engineering for a shared codebase shipping nine standalone WebGL titles (peaked at 5–10k DAU) plus a high-traffic mobile product reaching 9M+ users.</div>
           <ul class="cv-exp-points">
-            <li>Reduced WebGL build size from <strong>100 MB to 20 MB</strong> through shader variant scoping, asset stripping and texture/audio re-encoding, improving accessibility for low-bandwidth browser users.</li>
-            <li>Improved low-end Android performance from <strong>~15 FPS to stable 60 FPS</strong> through GC allocation reduction, pooling, batching, physics-step tuning and profiler-driven optimization.</li>
-            <li>Designed a <strong>reusable Unity architecture</strong> with DI, hierarchical state machines, ScriptableObject configuration, save-system abstraction, Addressables and SDK abstraction.</li>
-            <li>Built <strong>Unity Editor tooling</strong> for asset import, ScriptableObject authoring and pre-build validation, reducing content setup time and preventing recurring release issues.</li>
-            <li>Supported production releases across WebGL and mobile platforms under strict performance, memory and build-size constraints.</li>
-            <li>Optimized environment geometry from <strong>~1M to ~40k triangles</strong> on a mobile prototype via mesh decimation, LODs and silhouette-preserving proxies.</li>
+            <li>Built and maintained a <strong>shared Unity codebase shipping nine standalone WebGL titles</strong> (Find the Brainrots, Plane Builder, Plus-One Jump, Plus-One Run, Slimes, Build Island and others) from per-game feature branches; reusable services, state machine and save layer across all of them.</li>
+            <li>Reduced WebGL build size from <strong>100 MB to 20 MB</strong> through shader-variant scoping, asset stripping and texture/audio re-encoding; improved low-end Android from <strong>~15 FPS to stable 60 FPS</strong> via GC allocation reduction, pooling, batching and profiler-driven optimization; eliminated mobile-browser page reloads using on-demand <code>Resources.Load</code> + explicit <code>UnloadUnusedAssets</code> / <code>GC.Collect</code>.</li>
+            <li>Built a <strong>1k-line custom Rigidbody vehicle controller</strong> — spring-damper suspension with bump stops and sphere-cast wheel probes, drift, boost, downforce, air control and auto-recovery — refactored from an earlier ConfigurableJoint prototype to stabilize handling.</li>
+            <li>Designed a <strong>reusable Unity architecture</strong>: DI (VContainer / custom service locator), hierarchical state machines, ScriptableObject configuration and a multi-backend save abstraction (PlayerPrefs / Mirra SDK cloud sync) driving reactive UI through R3 <code>ReactiveProperty</code>.</li>
+            <li>Integrated <strong>production monetization stack</strong> — AppLovin MAX with 13 mediation adapters, Unity IAP, Google Play Billing and Play Core in-app updates — and five analytics SDKs (GameAnalytics, AppMetrica, AppsFlyer, ByteBrew, Firebase) behind a single facade.</li>
+            <li>Optimized environment geometry from <strong>~1M to ~40k triangles</strong> on a mobile prototype via mesh decimation, LODs and silhouette-preserving proxies; supported production releases under strict performance, memory and build-size constraints.</li>
           </ul>
           <div class="cv-exp-tech">
-            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">Zenject</span><span class="tech-pill">UniRx</span><span class="tech-pill">UniTask</span><span class="tech-pill">Addressables</span><span class="tech-pill">WebGL/mobile profiling</span><span class="tech-pill">Editor Tooling</span>
+            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">URP</span><span class="tech-pill">VContainer</span><span class="tech-pill">R3</span><span class="tech-pill">UniTask</span><span class="tech-pill">Addressables</span><span class="tech-pill">AppLovin MAX</span><span class="tech-pill">Mirra SDK</span><span class="tech-pill">Playgama</span>
           </div>
         </div>
 
@@ -423,19 +423,27 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
         <div class="cv-skills">
           <div class="cv-skill-row">
             <div class="cv-skill-label">Engine &amp; Languages</div>
-            <div class="cv-skill-val">C#, Unity, URP</div>
+            <div class="cv-skill-val">C#, Unity (URP)</div>
           </div>
           <div class="cv-skill-row">
             <div class="cv-skill-label">Architecture</div>
-            <div class="cv-skill-val">SOLID, dependency injection, Zenject, lightweight custom context layer, hierarchical state machines, ScriptableObject-driven configuration, reactive event systems, save-system abstraction</div>
+            <div class="cv-skill-val">SOLID, dependency injection (VContainer, custom service locator), hierarchical state machines, ScriptableObject-driven configuration, reactive event systems (R3, UniRx, UniTask), save-system abstraction with multi-backend implementations</div>
           </div>
           <div class="cv-skill-row">
             <div class="cv-skill-label">Rendering</div>
-            <div class="cv-skill-val">custom URP render features and passes, image-effect composition, WebGL shader budgeting, ShaderVariantCollection management</div>
+            <div class="cv-skill-val">URP customization, runtime render scaling and mipmap streaming, Cinemachine 3, Unity Animation Rigging</div>
           </div>
           <div class="cv-skill-row">
             <div class="cv-skill-label">Physics</div>
-            <div class="cv-skill-val">ConfigurableJoints, multi-rigidbody systems, procedural meshes, blendshape-driven deformation</div>
+            <div class="cv-skill-val">custom Rigidbody vehicle controller (spring-damper suspension, sphere-cast probes, drift/boost/air-control), ConfigurableJoints, multi-rigidbody systems, procedural meshes</div>
+          </div>
+          <div class="cv-skill-row">
+            <div class="cv-skill-label">Platform SDKs</div>
+            <div class="cv-skill-val">AppLovin MAX (13 mediation adapters), Unity IAP, Google Play Billing &amp; Play Core, Mirra SDK 5, Playgama Bridge (WebGL portals)</div>
+          </div>
+          <div class="cv-skill-row">
+            <div class="cv-skill-label">Analytics</div>
+            <div class="cv-skill-val">GameAnalytics, AppMetrica, AppsFlyer, ByteBrew, Firebase Analytics</div>
           </div>
           <div class="cv-skill-row">
             <div class="cv-skill-label">Performance</div>
@@ -443,7 +451,7 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
           </div>
           <div class="cv-skill-row">
             <div class="cv-skill-label">Production Tooling</div>
-            <div class="cv-skill-val">Addressables, editor tooling, content pipelines, build pipelines, pre-build validation, Git, code review, mentoring</div>
+            <div class="cv-skill-val">Addressables, Unity Localization, custom Editor tools, content pipelines, pre-build validation, Git</div>
           </div>
         </div>
       </div>
