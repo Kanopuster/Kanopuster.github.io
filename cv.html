@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Iusup Abduliaparov — CV</title>
+<title>Iusup Abduliaparov | CV</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
@@ -206,7 +206,7 @@ body {
   position: relative;
 }
 .cv-exp-points li::before {
-  content: '–';
+  content: '•';
   position: absolute; left: 0;
   color: var(--text3);
 }
@@ -399,7 +399,7 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
           </div>
           <div class="cv-exp-subhead">
             <span class="cv-exp-subrole">Unity Engineer</span>
-            <span class="cv-exp-date">2025 – Present</span>
+            <span class="cv-exp-date">2025 to Present</span>
           </div>
           <div class="cv-exp-blurb">Building core Unity systems for an angiography training simulator covering X-ray-style visualization, guidewire and catheter interaction, contrast injection, C-arm operation and balloon/stent procedure logic.</div>
           <ul class="cv-exp-points">
@@ -422,15 +422,15 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
           </div>
           <div class="cv-exp-subhead">
             <span class="cv-exp-subrole">Unity Engineer | Engineering Owner and Co-founder</span>
-            <span class="cv-exp-date">2023 – 2026</span>
+            <span class="cv-exp-date">2023 to 2026</span>
           </div>
           <div class="cv-exp-blurb">Owned Unity engineering for a high-traffic Unity WebGL product reaching 9M+ users at 40k DAU peak, plus nine standalone WebGL titles built on a shared codebase.</div>
           <ul class="cv-exp-points">
             <li>Built and maintained a <strong>shared Unity codebase shipping nine standalone WebGL titles</strong> (Find the Brainrots, Plane Builder, Plus-One Jump, Plus-One Run, Slimes, Build Island and others) from per-game feature branches; reusable services, state machine and save layer across all of them.</li>
             <li>Reduced WebGL build size from <strong>100 MB to 20 MB</strong> through shader-variant scoping, asset stripping and texture/audio re-encoding; improved low-end Android from <strong>~15 FPS to stable 60 FPS</strong> via GC allocation reduction, pooling, batching and profiler-driven optimization; eliminated mobile-browser page reloads using on-demand <code>Resources.Load</code> + explicit <code>UnloadUnusedAssets</code> / <code>GC.Collect</code>.</li>
-            <li>Built a <strong>1k-line custom Rigidbody vehicle controller</strong> — spring-damper suspension with bump stops and sphere-cast wheel probes, drift, boost, downforce, air control and auto-recovery — refactored from an earlier ConfigurableJoint prototype to stabilize handling.</li>
+            <li>Built a <strong>1k-line custom Rigidbody vehicle controller</strong>: spring-damper suspension with bump stops and sphere-cast wheel probes, drift, boost, downforce, air control and auto-recovery; refactored from an earlier ConfigurableJoint prototype to stabilize handling.</li>
             <li>Designed a <strong>reusable Unity architecture</strong>: DI (VContainer / custom service locator), hierarchical state machines, ScriptableObject configuration and a multi-backend save abstraction (PlayerPrefs / Mirra SDK cloud sync) driving reactive UI through R3 <code>ReactiveProperty</code>.</li>
-            <li>Integrated <strong>production monetization stack</strong> — AppLovin MAX with 13 mediation adapters, Unity IAP, Google Play Billing and Play Core in-app updates — and five analytics SDKs (GameAnalytics, AppMetrica, AppsFlyer, ByteBrew, Firebase) behind a single facade.</li>
+            <li>Integrated <strong>production monetization stack</strong>: AppLovin MAX with 13 mediation adapters, Unity IAP, Google Play Billing and Play Core in-app updates, plus five analytics SDKs (GameAnalytics, AppMetrica, AppsFlyer, ByteBrew, Firebase) behind a single facade.</li>
             <li>Optimized environment geometry from <strong>~1M to ~40k triangles</strong> on a mobile prototype via mesh decimation, LODs and silhouette-preserving proxies; supported production releases under strict performance, memory and build-size constraints.</li>
           </ul>
           <div class="cv-exp-tech">
@@ -487,14 +487,14 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
             <div class="cv-edu-degree">Università Cattolica del Sacro Cuore</div>
             <div class="cv-edu-school">BSc Economics &amp; Management · Milan, Italy</div>
           </div>
-          <div class="cv-edu-date">2024 – Present</div>
+          <div class="cv-edu-date">2024 to Present</div>
         </div>
         <div class="cv-edu">
           <div class="cv-edu-left">
             <div class="cv-edu-degree">Ufa State Petroleum Tech. University</div>
             <div class="cv-edu-school">Automation &amp; Control Systems · Ufa, Russia</div>
           </div>
-          <div class="cv-edu-date">2022 – 2024</div>
+          <div class="cv-edu-date">2022 to 2024</div>
         </div>
       </div>
 
