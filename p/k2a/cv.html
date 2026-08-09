@@ -328,6 +328,8 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
 </style>
 
 <script>
+  const SUN_ICON = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg>';
+  const MOON_ICON = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2z"/></svg>';
   (function() {
     const stored = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -335,7 +337,7 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
     document.documentElement.setAttribute('data-theme', theme);
     document.addEventListener('DOMContentLoaded', function() {
       const btn = document.getElementById('theme-btn');
-      if (btn) btn.textContent = theme === 'dark' ? '☀' : '☽';
+      if (btn) btn.innerHTML = theme === 'dark' ? SUN_ICON : MOON_ICON;
     });
   })();
   function toggleTheme() {
@@ -344,7 +346,7 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
     const btn = document.getElementById('theme-btn');
-    if (btn) btn.textContent = next === 'dark' ? '☀' : '☽';
+    if (btn) btn.innerHTML = next === 'dark' ? SUN_ICON : MOON_ICON;
   }
 </script>
 </head>
@@ -354,7 +356,7 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
 <div class="topbar">
   <a class="topbar-back" href="index.html">← Portfolio</a>
   <div class="topbar-actions">
-    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">☽</button>
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2z"/></svg></button>
     <a class="btn-dl" href="Iusup_Abduliaparov_CV_Unity_Developer.pdf" download="Iusup_Abduliaparov_CV_Unity_Developer.pdf">↓ Download CV</a>
   </div>
 </div>

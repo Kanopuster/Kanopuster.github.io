@@ -328,6 +328,8 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
 </style>
 
 <script>
+  const SUN_ICON = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/></svg>';
+  const MOON_ICON = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2z"/></svg>';
   (function() {
     const stored = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -335,7 +337,7 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
     document.documentElement.setAttribute('data-theme', theme);
     document.addEventListener('DOMContentLoaded', function() {
       const btn = document.getElementById('theme-btn');
-      if (btn) btn.textContent = theme === 'dark' ? '☀' : '☽';
+      if (btn) btn.innerHTML = theme === 'dark' ? SUN_ICON : MOON_ICON;
     });
   })();
   function toggleTheme() {
@@ -344,7 +346,7 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
     const btn = document.getElementById('theme-btn');
-    if (btn) btn.textContent = next === 'dark' ? '☀' : '☽';
+    if (btn) btn.innerHTML = next === 'dark' ? SUN_ICON : MOON_ICON;
   }
 </script>
 </head>
@@ -354,7 +356,7 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
 <div class="topbar">
   <a class="topbar-back" href="index.html">← Portfolio</a>
   <div class="topbar-actions">
-    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme">☽</button>
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2z"/></svg></button>
     <a class="btn-dl" href="Iusup_Abduliaparov_CV_Simulation_v2_ATS.pdf" download="Iusup_Abduliaparov_CV_Simulation_v2_ATS.pdf">↓ Download CV</a>
   </div>
 </div>
@@ -366,7 +368,7 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
     <!-- HEADER -->
     <div class="cv-header">
       <div class="cv-name">Iusup Abduliaparov</div>
-      <div class="cv-title">Unity C# Engineer | Simulation, WebGL and Real-Time 3D Applications</div>
+      <div class="cv-title">Unity C# Engineer | Medical Simulation, Real-Time Rendering and Physics</div>
       <div class="cv-meta">
         <span class="cv-meta-item">Milan, Italy</span>
         <span class="cv-meta-item"><a href="mailto:yusup.abdulyaparov@gmail.com">yusup.abdulyaparov@gmail.com</a></span>
@@ -384,7 +386,7 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
       <div class="cv-section">
         <div class="cv-section-title">Professional Summary</div>
         <p class="cv-profile">
-          I build interactive training and visualization systems with strong attention to architecture, performance and production constraints. Recent work includes a medical angiography simulator with real-time X-ray-style rendering, catheter interaction, procedural workflow logic and a hardware-oriented C-arm control layer. Previously shipped and optimized a high-traffic Unity WebGL product reaching 9M+ users at 40k DAU peak, plus nine standalone WebGL titles built on a shared codebase.
+          Unity C# engineer specialising in real-time simulation and visualization. Currently the sole engineer on a coronary angiography trainer, building its fluoroscopic imaging, contrast haemodynamics, instrument physics and the angioplasty and stenting workflow, validated against reference angiograms with clinical reviewers. Earlier work shipped high-traffic real-time products reaching 9M+ users at 40k DAU peak, cutting WebGL build size from 100 MB to 20 MB and lifting low-end Android from ~15 to a stable 60 FPS.
         </p>
       </div>
 
@@ -394,24 +396,25 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
 
         <div class="cv-exp">
           <div class="cv-exp-header">
-            <span class="cv-exp-role">Medical Training Simulator (NDA)</span>
+            <span class="cv-exp-role">Coronary Angiography Simulator</span>
             <span class="cv-exp-loc">Remote (contract)</span>
           </div>
           <div class="cv-exp-subhead">
             <span class="cv-exp-subrole">Unity Engineer</span>
             <span class="cv-exp-date">2025 to Present</span>
           </div>
-          <div class="cv-exp-blurb">Building core Unity systems for an angiography training simulator covering X-ray-style visualization, guidewire and catheter interaction, contrast injection, C-arm operation and balloon/stent procedure logic.</div>
+          <div class="cv-exp-blurb">Sole engineer on a coronary angiography trainer used to rehearse catheter procedures: X-ray imaging, contrast behaviour, instrument physics and the balloon and stent workflow, matched to reference angiograms with clinical reviewers.</div>
           <ul class="cv-exp-points">
-            <li>Worked with clinical reviewers to convert procedure requirements into simulator states, validation rules and instrument profiles.</li>
-            <li>Built a <strong>real-time URP X-ray-style rendering pipeline</strong> using density accumulation, multi-pass composition and instrument overlays.</li>
-            <li>Implemented <strong>guidewire and catheter interaction</strong>, proximal-end actuation and bifurcation handling, supporting 8 instrument profiles without per-instrument code branches.</li>
-            <li>Developed a <strong>procedural balloon/stent workflow</strong> with radius control, vessel deformation, state validation and deployment gating based on positioning and inflation state.</li>
-            <li>Designed a <strong>hardware-abstraction layer for C-arm controls</strong>, separating simulator logic from input devices and preparing the system for future physical rig integration.</li>
-            <li>Built a <strong>ScriptableObject-driven instrument framework</strong> for collision settings, X-ray layer mapping and reusable rig slots, allowing new instrument profiles to be added through configuration rather than code.</li>
+            <li>Delivered the <strong>X-ray imaging pipeline</strong> as a five-pass URP render feature (per-tissue density accumulation, detector gain and lag, DSA subtraction road-mapping and a CT volume path), tuned frame by frame against reference angiograms.</li>
+            <li>Made contrast behave like injected dye rather than an animation: <strong>advection-diffusion transport solved on a 19-segment vessel graph</strong> built from the artery mesh, so filling follows anatomy, slows through a stenosis and stops at an occlusion.</li>
+            <li>Cut the injection frame hitch <strong>2.6&times;, from 12.3 ms to 4.7 ms</strong>, through profiler-driven work on the graph solver, holding real-time rates while the physics solver already consumed 59% of the frame.</li>
+            <li>Kept injection honest under motion: independent boluses superpose in a single field and the still-emitting volume <strong>tracks the catheter tip</strong> through a breathing, beating vessel.</li>
+            <li>Built <strong>instrument physics on a tail-driven rod solver</strong> with lumen coupling so catheter and guidewire move coaxially, with 8 instrument profiles defined by configuration rather than code.</li>
+            <li>Modelled treatment as it is performed: the <strong>balloon opens the lesion and elastically recoils</strong>, while a stent crimped on it expands, implants on deflation and stays fixed to the breathing vessel wall.</li>
+            <li>Unblocked releases by tracing a class of <strong>blank-render build failures</strong> to the render pipeline being bound to only two of six quality levels.</li>
           </ul>
           <div class="cv-exp-tech">
-            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">URP</span><span class="tech-pill">ShaderLab/HLSL</span><span class="tech-pill">Burst</span><span class="tech-pill">Custom Render Features</span><span class="tech-pill">ScriptableObjects</span><span class="tech-pill">Procedural Meshes</span>
+            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">URP</span><span class="tech-pill">ShaderLab/HLSL</span><span class="tech-pill">Custom Render Features</span><span class="tech-pill">Numerical Methods</span><span class="tech-pill">Obi</span><span class="tech-pill">Burst</span><span class="tech-pill">ScriptableObjects</span>
           </div>
         </div>
 
