@@ -368,7 +368,7 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
     <!-- HEADER -->
     <div class="cv-header">
       <div class="cv-name">Iusup Abduliaparov</div>
-      <div class="cv-title">Unity C# Engineer | Medical Simulation, Real-Time Rendering and Physics</div>
+      <div class="cv-title">C# Simulation Software Engineer | Real-Time 3D, Rendering &amp; Physics</div>
       <div class="cv-meta">
         <span class="cv-meta-item">Milan, Italy</span>
         <span class="cv-meta-item"><a href="mailto:yusup.abdulyaparov@gmail.com">yusup.abdulyaparov@gmail.com</a></span>
@@ -386,7 +386,7 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
       <div class="cv-section">
         <div class="cv-section-title">Professional Summary</div>
         <p class="cv-profile">
-          Unity C# engineer specialising in real-time simulation and visualization. Currently the sole engineer on a coronary angiography trainer, building its fluoroscopic imaging, contrast haemodynamics, instrument physics and the angioplasty and stenting workflow, validated against reference angiograms with clinical reviewers. Earlier work shipped high-traffic real-time products reaching 9M+ users at 40k DAU peak, cutting WebGL build size from 100 MB to 20 MB and lifting low-end Android from ~15 to a stable 60 FPS.
+          C# simulation software engineer specialising in real-time medical imaging, numerical transport, instrument physics and performance-critical 3D systems. Sole engineer on a coronary angiography trainer validated against reference angiograms with clinical reviewers. Earlier work reached 9M+ users at 40k DAU peak, reducing a WebGL build from 100 MB to 20 MB and improving low-end Android performance from ~15 to a stable 60 FPS.
         </p>
       </div>
 
@@ -400,18 +400,17 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
             <span class="cv-exp-loc">Remote (contract)</span>
           </div>
           <div class="cv-exp-subhead">
-            <span class="cv-exp-subrole">Unity Engineer</span>
+            <span class="cv-exp-subrole">Simulation Software Engineer</span>
             <span class="cv-exp-date">2025 to Present</span>
           </div>
-          <div class="cv-exp-blurb">Sole engineer on a coronary angiography trainer used to rehearse catheter procedures: X-ray imaging, contrast behaviour, instrument physics and the balloon and stent workflow, matched to reference angiograms with clinical reviewers.</div>
+          <div class="cv-exp-blurb">Sole engineer on a coronary angiography trainer spanning X-ray imaging, contrast transport, instrument physics and balloon/stent treatment, validated against reference angiograms with clinical reviewers.</div>
           <ul class="cv-exp-points">
-            <li>Delivered the <strong>X-ray imaging pipeline</strong> as a five-pass URP render feature (per-tissue density accumulation, detector gain and lag, DSA subtraction road-mapping and a CT volume path), tuned frame by frame against reference angiograms.</li>
-            <li>Made contrast behave like injected dye rather than an animation: <strong>advection-diffusion transport solved on a 19-segment vessel graph</strong> built from the artery mesh, so filling follows anatomy, slows through a stenosis and stops at an occlusion.</li>
-            <li>Cut the injection frame hitch <strong>2.6&times;, from 12.3 ms to 4.7 ms</strong>, through profiler-driven work on the graph solver, holding real-time rates while the physics solver already consumed 59% of the frame.</li>
-            <li>Kept injection honest under motion: independent boluses superpose in a single field and the still-emitting volume <strong>tracks the catheter tip</strong> through a breathing, beating vessel.</li>
-            <li>Built <strong>instrument physics on a tail-driven rod solver</strong> with lumen coupling so catheter and guidewire move coaxially, with 8 instrument profiles defined by configuration rather than code.</li>
-            <li>Modelled treatment as it is performed: the <strong>balloon opens the lesion and elastically recoils</strong>, while a stent crimped on it expands, implants on deflation and stays fixed to the breathing vessel wall.</li>
-            <li>Unblocked releases by tracing a class of <strong>blank-render build failures</strong> to the render pipeline being bound to only two of six quality levels.</li>
+            <li>Built a <strong>five-pass URP fluoroscopy pipeline</strong> with tissue-density accumulation, detector gain/lag, DSA road-mapping and a CT-volume path; tuned frame by frame against reference angiograms.</li>
+            <li>Implemented <strong>advection-diffusion contrast transport on a 19-segment vessel graph</strong> derived from the artery mesh, reproducing anatomical filling, stenosis slowdown and occlusion.</li>
+            <li>Reduced the injection frame hitch <strong>2.6&times;, from 12.3 ms to 4.7 ms</strong>, while physics already consumed 59% of the frame.</li>
+            <li>Made multiple boluses superpose in one field while the emitting volume <strong>tracks the catheter tip</strong> through a breathing, beating vessel.</li>
+            <li>Built <strong>tail-driven rod-solver physics with lumen coupling</strong> for coaxial catheter/guidewire motion; configured eight instrument profiles without code.</li>
+            <li>Simulated treatment mechanics: <strong>balloon dilation with elastic recoil</strong>, plus a stent that expands, implants on deflation and stays fixed to the breathing vessel wall.</li>
           </ul>
           <div class="cv-exp-tech">
             <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">URP</span><span class="tech-pill">ShaderLab/HLSL</span><span class="tech-pill">Custom Render Features</span><span class="tech-pill">Numerical Methods</span><span class="tech-pill">Obi</span><span class="tech-pill">Burst</span><span class="tech-pill">ScriptableObjects</span>
@@ -424,20 +423,19 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
             <span class="cv-exp-loc">Remote</span>
           </div>
           <div class="cv-exp-subhead">
-            <span class="cv-exp-subrole">Unity Engineer | Engineering Owner and Co-founder</span>
+            <span class="cv-exp-subrole">Real-Time 3D Software Engineer &amp; Co-founder</span>
             <span class="cv-exp-date">2023 to 2026</span>
           </div>
-          <div class="cv-exp-blurb">Owned Unity engineering for a high-traffic Unity WebGL product reaching 9M+ users at 40k DAU peak, plus nine standalone WebGL titles built on a shared codebase.</div>
+          <div class="cv-exp-blurb">Owned C# and real-time 3D engineering for a high-traffic WebGL product reaching 9M+ users at 40k DAU peak, plus nine standalone WebGL titles built on a shared codebase.</div>
           <ul class="cv-exp-points">
-            <li>Built and maintained a <strong>shared Unity codebase shipping nine standalone WebGL titles</strong> (Find the Brainrots, Plane Builder, Plus-One Jump, Plus-One Run, Slimes, Build Island and others) from per-game feature branches; reusable services, state machine and save layer across all of them.</li>
-            <li>Reduced WebGL build size from <strong>100 MB to 20 MB</strong> through shader-variant scoping, asset stripping and texture/audio re-encoding; improved low-end Android from <strong>~15 FPS to stable 60 FPS</strong> via GC allocation reduction, pooling, batching and profiler-driven optimization; eliminated mobile-browser page reloads using on-demand <code>Resources.Load</code> + explicit <code>UnloadUnusedAssets</code> / <code>GC.Collect</code>.</li>
+            <li>Shipped <strong>nine standalone WebGL titles</strong> from a shared C# codebase with reusable services, state machine and save layer across per-game feature branches.</li>
+            <li>Reduced WebGL build size from <strong>100 MB to 20 MB</strong> through shader and asset scoping plus media re-encoding; improved low-end Android from <strong>~15 FPS to stable 60 FPS</strong> through GC reduction, pooling, batching and profiler-driven optimization.</li>
             <li>Built a <strong>1k-line custom Rigidbody vehicle controller</strong>: spring-damper suspension with bump stops and sphere-cast wheel probes, drift, boost, downforce, air control and auto-recovery; refactored from an earlier ConfigurableJoint prototype to stabilize handling.</li>
-            <li>Designed a <strong>reusable Unity architecture</strong>: DI (VContainer / custom service locator), hierarchical state machines, ScriptableObject configuration and a multi-backend save abstraction (PlayerPrefs / Mirra SDK cloud sync) driving reactive UI through R3 <code>ReactiveProperty</code>.</li>
-            <li>Integrated <strong>production monetization stack</strong>: AppLovin MAX with 13 mediation adapters, Unity IAP, Google Play Billing and Play Core in-app updates, plus five analytics SDKs (GameAnalytics, AppMetrica, AppsFlyer, ByteBrew, Firebase) behind a single facade.</li>
+            <li>Designed <strong>reusable architecture</strong> with dependency injection, hierarchical state machines, ScriptableObject configuration, reactive UI and a multi-backend persistence layer.</li>
             <li>Optimized environment geometry from <strong>~1M to ~40k triangles</strong> on a mobile prototype via mesh decimation, LODs and silhouette-preserving proxies; supported production releases under strict performance, memory and build-size constraints.</li>
           </ul>
           <div class="cv-exp-tech">
-            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">URP</span><span class="tech-pill">VContainer</span><span class="tech-pill">R3</span><span class="tech-pill">UniTask</span><span class="tech-pill">Addressables</span><span class="tech-pill">AppLovin MAX</span><span class="tech-pill">Mirra SDK</span><span class="tech-pill">Playgama</span>
+            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">URP</span><span class="tech-pill">VContainer</span><span class="tech-pill">R3</span><span class="tech-pill">UniTask</span><span class="tech-pill">Addressables</span><span class="tech-pill">WebGL</span><span class="tech-pill">Android</span>
           </div>
         </div>
 
@@ -448,32 +446,28 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
         <div class="cv-section-title">Technical Skills</div>
         <div class="cv-skills">
           <div class="cv-skill-row">
-            <div class="cv-skill-label">Engine &amp; Languages</div>
-            <div class="cv-skill-val">C#, Unity (URP)</div>
+            <div class="cv-skill-label">C# &amp; Runtime</div>
+            <div class="cv-skill-val">C#, Unity, URP, ShaderLab/HLSL, WebGL</div>
           </div>
           <div class="cv-skill-row">
             <div class="cv-skill-label">Architecture</div>
             <div class="cv-skill-val">SOLID, dependency injection (VContainer, custom service locator), hierarchical state machines, ScriptableObject-driven configuration, reactive event systems (R3, UniRx, UniTask), save-system abstraction with multi-backend implementations</div>
           </div>
           <div class="cv-skill-row">
-            <div class="cv-skill-label">Rendering</div>
-            <div class="cv-skill-val">custom URP render features and passes, image-effect composition, X-ray-style visualization, WebGL shader budgeting, ShaderVariantCollection management, Cinemachine 3, Unity Animation Rigging</div>
+            <div class="cv-skill-label">Numerical Simulation</div>
+            <div class="cv-skill-val">advection-diffusion transport, vessel-graph solvers, stenosis and occlusion behaviour, multi-bolus fields, rod and soft-body physics</div>
           </div>
           <div class="cv-skill-row">
-            <div class="cv-skill-label">Physics &amp; Simulation</div>
-            <div class="cv-skill-val">custom Rigidbody vehicle controller (spring-damper, sphere-cast, drift/boost/air-control), ConfigurableJoints, guidewire/catheter simulation, multi-rigidbody systems, procedural meshes, blendshape-driven deformation</div>
+            <div class="cv-skill-label">Rendering &amp; Medical Imaging</div>
+            <div class="cv-skill-val">custom URP render features, five-pass fluoroscopy, DSA road-mapping, density accumulation, detector gain and lag, CT-volume path</div>
           </div>
           <div class="cv-skill-row">
-            <div class="cv-skill-label">Platform SDKs</div>
-            <div class="cv-skill-val">AppLovin MAX (13 mediation adapters), Unity IAP, Google Play Billing &amp; Play Core, Mirra SDK 5, Playgama Bridge (WebGL portals)</div>
-          </div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Analytics</div>
-            <div class="cv-skill-val">GameAnalytics, AppMetrica, AppsFlyer, ByteBrew, Firebase Analytics</div>
+            <div class="cv-skill-label">Physics &amp; Real-Time 3D</div>
+            <div class="cv-skill-val">catheter and guidewire lumen coupling, custom Rigidbody vehicle controller, ConfigurableJoints, procedural meshes, skinned deformation</div>
           </div>
           <div class="cv-skill-row">
             <div class="cv-skill-label">Performance</div>
-            <div class="cv-skill-val">Unity Profiler, Memory Profiler, GC allocation reduction, draw-call analysis and batching, WebGL build-size optimization, low-end Android profiling</div>
+            <div class="cv-skill-val">Unity Profiler, Memory Profiler, GC reduction, draw-call batching, WebGL build-size optimization, low-end Android profiling</div>
           </div>
           <div class="cv-skill-row">
             <div class="cv-skill-label">Production Tooling</div>
