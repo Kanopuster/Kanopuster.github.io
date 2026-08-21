@@ -357,7 +357,8 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
   <a class="topbar-back" href="index.html">← Portfolio</a>
   <div class="topbar-actions">
     <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Toggle theme"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2z"/></svg></button>
-    <a class="btn-dl" href="Iusup_Abduliaparov_CV_Simulation_v2_ATS.pdf" download="Iusup_Abduliaparov_CV_Simulation_v2_ATS.pdf">↓ Download CV</a>
+    <a class="btn-dl" href="Iusup_Abduliaparov_CV_CSharp_Simulation_Engineer.pdf" download>↓ Download PDF</a>
+    <a class="btn-dl" href="Iusup_Abduliaparov_CV_CSharp_Simulation_Engineer.docx" download>↓ Download DOCX</a>
   </div>
 </div>
 
@@ -368,14 +369,14 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
     <!-- HEADER -->
     <div class="cv-header">
       <div class="cv-name">Iusup Abduliaparov</div>
-      <div class="cv-title">C# Simulation Software Engineer | Real-Time 3D, Rendering &amp; Physics</div>
+      <div class="cv-title">C# / Unity Simulation Engineer | Medical Training, Real-Time 3D &amp; Physics</div>
       <div class="cv-meta">
-        <span class="cv-meta-item">Milan, Italy</span>
+        <span class="cv-meta-item">Milan, Italy · Open to relocation</span>
         <span class="cv-meta-item"><a href="mailto:yusup.abdulyaparov@gmail.com">yusup.abdulyaparov@gmail.com</a></span>
         <span class="cv-meta-item">+39 351 443 2325</span>
         <span class="cv-meta-item"><a href="https://kanopuster.github.io/" target="_blank">Portfolio</a></span>
         <span class="cv-meta-item"><a href="https://www.linkedin.com/in/iusup-abduliaparov-85b30b30a/" target="_blank">LinkedIn</a></span>
-        <span class="cv-meta-item">English C1 · Russian Native</span>
+        <span class="cv-meta-item">English · Russian</span>
       </div>
     </div>
 
@@ -386,7 +387,7 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
       <div class="cv-section">
         <div class="cv-section-title">Professional Summary</div>
         <p class="cv-profile">
-          C# simulation software engineer specialising in real-time medical imaging, numerical transport, instrument physics and performance-critical 3D systems. Sole engineer on a coronary angiography trainer validated against reference angiograms with clinical reviewers. Earlier work reached 9M+ users at 40k DAU peak, reducing a WebGL build from 100 MB to 20 MB and improving low-end Android performance from ~15 to a stable 60 FPS.
+          C# / Unity simulation engineer building medical training software that connects real-time 3D graphics and physics to physical equipment. Since November 2025, working full-time in a two-engineer team on a commercial angiography trainer for a large international medical company. Earlier, co-founded Aviana, hired and led three programmers, and shipped Android and WebGL games on a shared architecture; products reached 9M+ users and 40k peak DAU. Based in Milan and open to relocation.
         </p>
       </div>
 
@@ -396,24 +397,22 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
 
         <div class="cv-exp">
           <div class="cv-exp-header">
-            <span class="cv-exp-role">Coronary Angiography Simulator</span>
-            <span class="cv-exp-loc">Remote (contract)</span>
+            <span class="cv-exp-role">Confidential International MedTech Client</span>
+            <span class="cv-exp-loc">Contract, full-time</span>
           </div>
           <div class="cv-exp-subhead">
-            <span class="cv-exp-subrole">Simulation Software Engineer</span>
-            <span class="cv-exp-date">2025 to Present</span>
+            <span class="cv-exp-subrole">C# / Unity Simulation Engineer</span>
+            <span class="cv-exp-date">Nov 2025 to Present</span>
           </div>
-          <div class="cv-exp-blurb">Sole engineer on a coronary angiography trainer spanning X-ray imaging, contrast transport, instrument physics and balloon/stent treatment, validated against reference angiograms with clinical reviewers.</div>
+          <div class="cv-exp-blurb">In-development commercial angiography training system for medical students and clinicians, built for a large international medical company. I work in a two-engineer team with equal responsibility across the whole simulator. Client name is withheld; technical details are shared with permission.</div>
           <ul class="cv-exp-points">
-            <li>Built a <strong>five-pass URP fluoroscopy pipeline</strong> with tissue-density accumulation, detector gain/lag, DSA road-mapping and a CT-volume path; tuned frame by frame against reference angiograms.</li>
-            <li>Implemented <strong>advection-diffusion contrast transport on a 19-segment vessel graph</strong> derived from the artery mesh, reproducing anatomical filling, stenosis slowdown and occlusion.</li>
-            <li>Reduced the injection frame hitch <strong>2.6&times;, from 12.3 ms to 4.7 ms</strong>, while physics already consumed 59% of the frame.</li>
-            <li>Made multiple boluses superpose in one field while the emitting volume <strong>tracks the catheter tip</strong> through a breathing, beating vessel.</li>
-            <li>Built <strong>tail-driven rod-solver physics with lumen coupling</strong> for coaxial catheter/guidewire motion; configured eight instrument profiles without code.</li>
-            <li>Simulated treatment mechanics: <strong>balloon dilation with elastic recoil</strong>, plus a stent that expands, implants on deflation and stays fixed to the breathing vessel wall.</li>
+            <li>Connected the Unity software to the <strong>physical training unit</strong>: device detection, real-time control data, calibration, and synchronized catheter and guidewire movement.</li>
+            <li>Built <strong>diagnostic and treatment cases</strong> for coronary angiography, including stenosis navigation, balloon angioplasty, stent placement, and follow-up contrast imaging.</li>
+            <li>Created <strong>X-ray-style graphics</strong> with contrast flow, DSA road-mapping, and breathing and heartbeat animation of the vessel model.</li>
+            <li>Developed <strong>catheter, guidewire, balloon, and stent physics</strong> so tools react to bends, branches, vessel narrowing, and movement of the animated vessel wall.</li>
           </ul>
           <div class="cv-exp-tech">
-            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">URP</span><span class="tech-pill">ShaderLab/HLSL</span><span class="tech-pill">Custom Render Features</span><span class="tech-pill">Numerical Methods</span><span class="tech-pill">Obi</span><span class="tech-pill">Burst</span><span class="tech-pill">ScriptableObjects</span>
+            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">URP</span><span class="tech-pill">ShaderLab/HLSL</span><span class="tech-pill">Burst</span><span class="tech-pill">Windows</span><span class="tech-pill">Hardware Integration</span><span class="tech-pill">Medical Training</span>
           </div>
         </div>
 
@@ -423,20 +422,20 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
             <span class="cv-exp-loc">Remote</span>
           </div>
           <div class="cv-exp-subhead">
-            <span class="cv-exp-subrole">Real-Time 3D Software Engineer &amp; Co-founder</span>
-            <span class="cv-exp-date">2023 to 2026</span>
+            <span class="cv-exp-subrole">Co-founder &amp; Unity Engineering Lead</span>
+            <span class="cv-exp-date">2023 to Apr 2026</span>
           </div>
-          <div class="cv-exp-blurb">Owned C# and real-time 3D engineering for a high-traffic WebGL product reaching 9M+ users at 40k DAU peak, plus nine standalone WebGL titles built on a shared codebase.</div>
+          <div class="cv-exp-blurb">Co-founded Aviana and led engineering for its mobile and WebGL portfolio, working with the producer/co-founder on product direction and delivery.</div>
           <ul class="cv-exp-points">
-            <li>Shipped <strong>nine standalone WebGL titles</strong> from a shared C# codebase with reusable services, state machine and save layer across per-game feature branches.</li>
-            <li>Reduced WebGL build size from <strong>100 MB to 20 MB</strong> through shader and asset scoping plus media re-encoding; improved low-end Android from <strong>~15 FPS to stable 60 FPS</strong> through GC reduction, pooling, batching and profiler-driven optimization.</li>
-            <li>Built a <strong>1k-line custom Rigidbody vehicle controller</strong>: spring-damper suspension with bump stops and sphere-cast wheel probes, drift, boost, downforce, air control and auto-recovery; refactored from an earlier ConfigurableJoint prototype to stabilize handling.</li>
-            <li>Designed <strong>reusable architecture</strong> with dependency injection, hierarchical state machines, ScriptableObject configuration, reactive UI and a multi-backend persistence layer.</li>
-            <li>Optimized environment geometry from <strong>~1M to ~40k triangles</strong> on a mobile prototype via mesh decimation, LODs and silhouette-preserving proxies; supported production releases under strict performance, memory and build-size constraints.</li>
+            <li><strong>Hired and led three programmers</strong> and coordinated development with the game designer and producer/co-founder.</li>
+            <li>Shipped <strong>nine WebGL titles</strong> from the shared codebase; one product reached <strong>9M+ users and 40k peak DAU</strong>.</li>
+            <li>Ported <strong>Android games to WebGL</strong> on a shared C# architecture covering input, UI, saves, services, and platform integrations.</li>
+            <li>Reduced a WebGL build from <strong>100 MB to 20 MB</strong> and improved low-end Android performance from approximately <strong>15 FPS to a stable 60 FPS</strong>.</li>
           </ul>
           <div class="cv-exp-tech">
-            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">URP</span><span class="tech-pill">VContainer</span><span class="tech-pill">R3</span><span class="tech-pill">UniTask</span><span class="tech-pill">Addressables</span><span class="tech-pill">WebGL</span><span class="tech-pill">Android</span>
+            <span class="tech-pill">Unity</span><span class="tech-pill">C#</span><span class="tech-pill">URP</span><span class="tech-pill">VContainer</span><span class="tech-pill">R3</span><span class="tech-pill">UniTask</span><span class="tech-pill">Addressables</span><span class="tech-pill">WebGL</span><span class="tech-pill">Android</span><span class="tech-pill">Team Leadership</span>
           </div>
+          <div class="cv-exp-blurb"><strong>Selected releases:</strong> <a href="https://playhop.com/app/289200" target="_blank" rel="noopener">Mega Ramp Stunt</a> · <a href="https://playgama.com/game/zombie-check-survival-shelter" target="_blank" rel="noopener">Zombie Check: Survival Shelter</a> · <a href="https://play.google.com/store/apps/details?id=obby.island.build&amp;hl=en" target="_blank" rel="noopener">Build Island</a></div>
         </div>
 
       </div>
@@ -445,34 +444,11 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
       <div class="cv-section">
         <div class="cv-section-title">Technical Skills</div>
         <div class="cv-skills">
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">C# &amp; Runtime</div>
-            <div class="cv-skill-val">C#, Unity, URP, ShaderLab/HLSL, WebGL</div>
-          </div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Architecture</div>
-            <div class="cv-skill-val">SOLID, dependency injection (VContainer, custom service locator), hierarchical state machines, ScriptableObject-driven configuration, reactive event systems (R3, UniRx, UniTask), save-system abstraction with multi-backend implementations</div>
-          </div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Numerical Simulation</div>
-            <div class="cv-skill-val">advection-diffusion transport, vessel-graph solvers, stenosis and occlusion behaviour, multi-bolus fields, rod and soft-body physics</div>
-          </div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Rendering &amp; Medical Imaging</div>
-            <div class="cv-skill-val">custom URP render features, five-pass fluoroscopy, DSA road-mapping, density accumulation, detector gain and lag, CT-volume path</div>
-          </div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Physics &amp; Real-Time 3D</div>
-            <div class="cv-skill-val">catheter and guidewire lumen coupling, custom Rigidbody vehicle controller, ConfigurableJoints, procedural meshes, skinned deformation</div>
-          </div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Performance</div>
-            <div class="cv-skill-val">Unity Profiler, Memory Profiler, GC reduction, draw-call batching, WebGL build-size optimization, low-end Android profiling</div>
-          </div>
-          <div class="cv-skill-row">
-            <div class="cv-skill-label">Production Tooling</div>
-            <div class="cv-skill-val">Addressables, Unity Localization, custom Editor tools, content pipelines, pre-build validation, Git</div>
-          </div>
+          <div class="cv-skill-row"><div class="cv-skill-label">Core</div><div class="cv-skill-val">C#, Unity, URP, ShaderLab/HLSL, Burst, WebGL, Android, Windows</div></div>
+          <div class="cv-skill-row"><div class="cv-skill-label">Simulation</div><div class="cv-skill-val">hardware input, calibration, contrast-flow simulation, catheter/guidewire physics, procedural vessels</div></div>
+          <div class="cv-skill-row"><div class="cv-skill-label">Architecture</div><div class="cv-skill-val">SOLID, dependency injection, state machines, ScriptableObjects, reactive UI, cross-platform codebases</div></div>
+          <div class="cv-skill-row"><div class="cv-skill-label">Performance</div><div class="cv-skill-val">Unity Profiler, Memory Profiler, GC reduction, pooling, batching, LODs, build-size optimization</div></div>
+          <div class="cv-skill-row"><div class="cv-skill-label">Leadership</div><div class="cv-skill-val">hiring, leading three programmers, game design collaboration, production collaboration</div></div>
         </div>
       </div>
 
@@ -488,8 +464,8 @@ body { transition: background-color 0.3s ease, color 0.3s ease; }
         </div>
         <div class="cv-edu">
           <div class="cv-edu-left">
-            <div class="cv-edu-degree">Ufa State Petroleum Tech. University</div>
-            <div class="cv-edu-school">Automation &amp; Control Systems · Ufa, Russia</div>
+            <div class="cv-edu-degree">Ufa State Petroleum Technical University</div>
+            <div class="cv-edu-school">Automation &amp; Control Systems Engineering · Ufa, Russia</div>
           </div>
           <div class="cv-edu-date">2022 to 2024</div>
         </div>
