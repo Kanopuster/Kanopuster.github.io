@@ -185,9 +185,11 @@ main,footer,.nav{position:relative;z-index:2}
 .skills p{color:var(--muted);font-size:15px;margin-top:2px}
 
 /* ───────── exit ───────── */
-.exit{position:relative;isolation:isolate;min-height:140vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding-block:30vh 12vh}
-.exit::before{content:"";position:absolute;z-index:-1;pointer-events:none;left:50%;top:50%;width:150vw;height:130vh;transform:translate(-50%,-42%);
-  background:radial-gradient(closest-side,rgba(4,6,10,.94) 0%,rgba(4,6,10,.86) 38%,rgba(4,6,10,.5) 66%,rgba(4,6,10,0) 100%)}
+.exit{position:relative;isolation:isolate;min-height:140vh;display:flex;align-items:center;padding-block:30vh 12vh;overflow-x:clip}
+.exit-in{display:flex;flex-direction:column;align-items:center;text-align:center}
+/* the fade spans the section's own width, so it can never widen the page */
+.exit::before{content:"";position:absolute;z-index:-1;pointer-events:none;left:0;right:0;top:12%;bottom:-8%;
+  background:radial-gradient(closest-side,rgba(4,6,10,.94) 0%,rgba(4,6,10,.86) 40%,rgba(4,6,10,.5) 70%,rgba(4,6,10,0) 100%)}
 .exit h2{font-weight:800;font-size:clamp(64px,13vw,200px);line-height:.88;letter-spacing:-.05em;
   color:#fff6e8;text-shadow:0 2px 30px rgba(4,6,10,.9),0 0 70px rgba(255,184,77,.28)}
 .exit .lead{font-family:var(--display);font-weight:600;font-size:clamp(19px,2vw,25px);line-height:1.34;letter-spacing:-.018em;color:#aab5c1;max-width:40ch;margin:26px auto 0}
@@ -224,11 +226,10 @@ footer a{text-decoration:none}
 .rail span{position:absolute;left:-3px;width:8px;height:1px;background:var(--muted)}
 
 /* Firefox repaints backdrop blur over a WebGL canvas every frame: use solid glass there */
-@supports (-moz-appearance:none){
-  .card{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(6,9,14,.92)}
-  .nav{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(4,6,10,.9)}
-  .hud{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(4,6,10,.88)}
-}
+/* backdrop blur over a live WebGL canvas re-blurs every frame: solid glass instead */
+.card{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(6,9,14,.9)}
+.nav{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(4,6,10,.88)}
+.hud{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(4,6,10,.86)}
 
 /* ───────── cursor ───────── */
 .cursor{position:fixed;z-index:400;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;
@@ -406,7 +407,7 @@ footer a{text-decoration:none}
     </section>
   </div>
 
-  <section class="exit wrap" id="contact">
+  <section class="exit" id="contact"><div class="wrap exit-in">
     <h2 class="split later" id="cta">Hiring?</h2>
     <p class="lead">I work full-time today and I'm open to C# / Unity simulation, medical training, industrial XR and real-time 3D roles. Based in Milan, willing to relocate.</p>
     <div class="actions">
@@ -420,7 +421,7 @@ footer a{text-decoration:none}
       <a href="https://github.com/Kanopuster" target="_blank" rel="noopener">GitHub</a>
       <span>English, Russian</span>
     </p>
-  </section>
+  </div></section>
 </main>
 
 <footer>
@@ -559,10 +560,12 @@ const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const SNAP=/[?&]snap/.test(location.search);
 const small=innerWidth<861;
 const FF=/firefox/i.test(navigator.userAgent);
+const Q=new URLSearchParams(location.search);
 const canvas=document.getElementById('gl');
 let renderer;
 try{renderer=new THREE.WebGLRenderer({canvas,antialias:false,powerPreference:'high-performance'})}catch(e){throw e}
-renderer.setPixelRatio(Math.min(devicePixelRatio||1,FF?1.25:(small?1.5:1.75)));
+const DPR_MAX=Q.has('dpr')?+Q.get('dpr'):Math.min(devicePixelRatio||1,FF?1.25:(small?1.5:1.5));
+let dprScale=1,useBloom=!Q.has('nobloom'),slowSecs=0;renderer.setPixelRatio(DPR_MAX);
 renderer.setClearColor(0x04060a,1);
 
 const scene=new THREE.Scene();
@@ -600,12 +603,12 @@ function walk(start,dir,len,step,wobble,pull){
 }
 
 /* ── the vessel material: X-ray fresnel plus a contrast front ── */
-const U={uTime:{value:0},uInj:{value:new THREE.Vector4(-99,-99,-99,-99)},uSpeed:{value:240},uInside:{value:0},uFill:{value:0},uFog:{value:.0005},uDim:{value:0}};
+const U={uTime:{value:0},uInj:{value:new THREE.Vector4(-99,-99,-99,-99)},uSpeed:{value:240},uInside:{value:0},uFill:{value:0},uFog:{value:.0005},uDim:{value:0},uGain:{value:1}};
 const vesselMat=new THREE.ShaderMaterial({
   uniforms:U,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,
   vertexShader:`attribute float aD;varying float vD;varying vec3 vN;varying vec3 vV;
     void main(){vD=aD;vec4 mv=modelViewMatrix*vec4(position,1.);vV=mv.xyz;vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*mv;}`,
-  fragmentShader:`uniform float uTime;uniform vec4 uInj;uniform float uSpeed;uniform float uInside;uniform float uFill;uniform float uFog;uniform float uDim;
+  fragmentShader:`uniform float uTime;uniform vec4 uInj;uniform float uSpeed;uniform float uInside;uniform float uFill;uniform float uFog;uniform float uDim;uniform float uGain;
     varying float vD;varying vec3 vN;varying vec3 vV;
     float wv(float t0){float a=uTime-t0-vD/uSpeed;return a<0.?0.:min(1.,a/.12)*exp(-max(0.,a-1.8)/1.4);}
     float hd(float t0){float a=uTime-t0-vD/uSpeed;return (a>0.&&a<.4)?1.-a/.4:0.;}
@@ -627,7 +630,7 @@ const vesselMat=new THREE.ShaderMaterial({
       float dist=length(vV);
       float fog=exp(-dist*uFog);
       float nearFade=mix(1.,smoothstep(6.,60.,dist),uInside);
-      gl_FragColor=vec4(col*fog*nearFade*(1.-uDim),1.);
+      gl_FragColor=vec4(col*fog*nearFade*(1.-uDim)*uGain,1.);
     }`
 });
 
@@ -684,8 +687,8 @@ for(let i=0;i<PN;i++){pa[i]=.4+R()*.8;pseed.push([R(),R()*Math.PI*2,Math.sqrt(R(
 pg.setAttribute('position',new THREE.BufferAttribute(pp,3));pg.setAttribute('aA',new THREE.BufferAttribute(pa,1));
 const PU={uOp:{value:0},uSize:{value:small?1.8:2.2}};
 const particles=new THREE.Points(pg,new THREE.ShaderMaterial({uniforms:PU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
-  vertexShader:`attribute float aA;uniform float uSize;varying float vA;void main(){vA=aA;vec4 mv=modelViewMatrix*vec4(position,1.);gl_PointSize=min(26.,uSize*aA*(160./-mv.z));gl_Position=projectionMatrix*mv;}`,
-  fragmentShader:`uniform float uOp;varying float vA;void main(){float d=length(gl_PointCoord-.5);float a=1.-smoothstep(0.,.5,d);gl_FragColor=vec4(vec3(1.,.66,.36)*a*a*uOp*vA,1.);}`}));
+  vertexShader:`attribute float aA;uniform float uSize;varying float vA;void main(){vA=aA;vec4 mv=modelViewMatrix*vec4(position,1.);gl_PointSize=min(12.,uSize*aA*(160./-mv.z));gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`uniform float uOp;varying float vA;void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;float a=1.-smoothstep(0.,.5,d);gl_FragColor=vec4(vec3(1.,.66,.36)*a*a*uOp*vA,1.);}`}));
 particles.frustumCulled=false;scene.add(particles);
 
 /* faint scatter around the tree, like film grain in space */
@@ -693,9 +696,10 @@ const SN=small?500:1100,sg=new THREE.BufferGeometry(),sp=new Float32Array(SN*3),
 for(let i=0;i<SN;i++){const r=D*(.5+R()*1.6),th=R()*Math.PI*2,ph=Math.acos(2*R()-1);sp[i*3]=C.x+r*Math.sin(ph)*Math.cos(th);sp[i*3+1]=C.y+r*Math.cos(ph);sp[i*3+2]=C.z+r*Math.sin(ph)*Math.sin(th);sa[i]=.2+R()*.8}
 sg.setAttribute('position',new THREE.BufferAttribute(sp,3));sg.setAttribute('aA',new THREE.BufferAttribute(sa,1));
 const SU={uOp:{value:.6},uSize:{value:2}};
-scene.add(new THREE.Points(sg,new THREE.ShaderMaterial({uniforms:SU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
-  vertexShader:`attribute float aA;uniform float uSize;varying float vA;void main(){vA=aA;vec4 mv=modelViewMatrix*vec4(position,1.);gl_PointSize=uSize*aA*(600./-mv.z);gl_Position=projectionMatrix*mv;}`,
-  fragmentShader:`uniform float uOp;varying float vA;void main(){float d=length(gl_PointCoord-.5);float a=1.-smoothstep(0.,.5,d);gl_FragColor=vec4(vec3(.6,.75,1.)*a*uOp*vA*.5,1.);}`})));
+const scatter=new THREE.Points(sg,new THREE.ShaderMaterial({uniforms:SU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+  vertexShader:`attribute float aA;uniform float uSize;varying float vA;void main(){vA=aA;vec4 mv=modelViewMatrix*vec4(position,1.);gl_PointSize=min(4.,uSize*aA*(600./-mv.z));gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`uniform float uOp;varying float vA;void main(){float d=length(gl_PointCoord-.5);if(d>.5)discard;float a=1.-smoothstep(0.,.5,d);gl_FragColor=vec4(vec3(.6,.75,1.)*a*uOp*vA*.5,1.);}`}));
+scene.add(scatter);
 
 /* ── post: bloom makes the contrast burn ── */
 const composer=new EffectComposer(renderer);
@@ -706,7 +710,7 @@ composer.addPass(bloom);composer.addPass(new OutputPass());
 
 function resize(){
   const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);composer.setSize(w,h);
-  bloom.resolution.set(w/(FF?3:2),h/(FF?3:2));camera.aspect=w/h;camera.updateProjectionMatrix();measure();
+  bloom.resolution.set(w/(FF?4:3),h/(FF?4:3));camera.aspect=w/h;camera.updateProjectionMatrix();measure();
 }
 
 /* ── scroll choreography ── */
@@ -771,9 +775,24 @@ function drawEcg(t){
 
 /* ── loop ── */
 const clock=new THREE.Clock();
+let ftAcc=0,ftN=0,ftT=0;
+function setBloom(on){useBloom=on;U.uGain.value=on?1:1.7}
+if(!useBloom)setBloom(false);
+function adapt(raw){
+  ftAcc+=raw;ftN++;ftT+=raw;if(ftT<1)return;
+  const avg=ftAcc/ftN;ftAcc=ftN=ftT=0;
+  const was=dprScale;
+  // tier 1: fewer pixels; tier 2: drop the bloom passes and brighten the vessels instead
+  if(avg>.021){
+    if(dprScale>.7)dprScale=Math.max(.7,dprScale-.15);
+    else if(useBloom&&++slowSecs>=2)setBloom(false);
+  }else{slowSecs=0;if(avg<.0125&&dprScale<1)dprScale=Math.min(1,dprScale+.05)}
+  if(was!==dprScale){renderer.setPixelRatio(Math.max(.5,DPR_MAX*dprScale));composer.setPixelRatio(renderer.getPixelRatio());resize()}
+}
 function render(){
   if(document.hidden){clock.getDelta();return}
-  const dt=Math.min(.05,clock.getDelta()),t=U.uTime.value+=dt;
+  const raw=clock.getDelta();if(!Q.has('dpr'))adapt(Math.min(raw,.1));
+  const dt=Math.min(.05,raw),t=U.uTime.value+=dt;
   mx+=(mouse.x-mx)*.04;my+=(mouse.y-my)*.04;
   const dy=scrollY-lastY;lastY=scrollY;vel+=(Math.abs(dy)/Math.max(dt,.001)-vel)*.08;
   target(t);
@@ -790,8 +809,9 @@ function render(){
   if(phase!=='exit'){U.uFill.value*=.96;U.uDim.value*=.9}
   PU.uOp.value=U.uInside.value;SU.uOp.value=.6*(1-U.uInside.value);
   wire.material.opacity=U.uInside.value*.6;
+  particles.visible=PU.uOp.value>.01;scatter.visible=SU.uOp.value>.01;wire.visible=wire.material.opacity>.01;
   // particles stream towards the camera
-  if(U.uInside.value>.02){
+  if(particles.visible){
     const ct=phase==='inside'?cathT:(phase==='exit'?.9:0);
     for(let i=0;i<PN;i++){
       const s=pseed[i],tt=cl(ct+.004+(1-((s[0]+t*.05)%1))*.09),x=tt*LN,k=Math.min(LN-1,x|0),f=x-k,o=k*9,q=o+9,g=1-f;
@@ -807,7 +827,7 @@ function render(){
   const on=phase==='inside'||(phase==='dive'&&inside01>.5);
   hud.classList.toggle('on',on);rail.classList.toggle('on',on);
   if(on){hDepth.textContent=Math.round(cathT*133);railDot.style.top=(cathT/.9*100).toFixed(1)+'%';drawEcg(t)}
-  composer.render();
+  if(useBloom)composer.render();else renderer.render(scene,camera);
 }
 
 if(reduce){
