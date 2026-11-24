@@ -37,7 +37,7 @@
 }
 html{-webkit-text-size-adjust:100%;scroll-padding-top:64px;scrollbar-color:rgba(238,242,246,.2) transparent;accent-color:var(--dye)}
 body{
-  background:radial-gradient(80% 60% at 60% 30%,#0b1420 0%,var(--bg) 70%) fixed,var(--bg);color:var(--ink);
+  background:var(--bg);color:var(--ink);
   font:400 17px/1.53 var(--text);letter-spacing:-.012em;font-optical-sizing:auto;
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;
   caret-color:var(--dye);overflow-x:clip;
@@ -93,7 +93,7 @@ main,footer,.nav{position:relative;z-index:2}
 
 /* split letters, blur to sharp */
 .wd{display:inline-block;white-space:nowrap}
-.fx .split .ch{display:inline-block;opacity:0;transform:translateY(.4em) rotate(4deg);filter:blur(14px);animation:ch .9s var(--enter) forwards;animation-delay:calc(var(--i) * 32ms + var(--d,0ms))}
+.fx .split .ch{display:inline-block;opacity:0;transform:translateY(.4em) rotate(4deg);filter:blur(8px);animation:ch .9s var(--enter) forwards;animation-delay:calc(var(--i) * 32ms + var(--d,0ms))}
 @keyframes ch{to{opacity:1;transform:none;filter:blur(0)}}
 .fx .up{opacity:0;transform:translateY(16px);animation:up .7s var(--enter) forwards;animation-delay:var(--d,0ms)}
 @keyframes up{to{opacity:1;transform:none}}
@@ -131,8 +131,8 @@ main,footer,.nav{position:relative;z-index:2}
 .card::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;
   background:linear-gradient(140deg,rgba(255,184,77,.55),transparent 35%,transparent 70%,rgba(160,200,255,.3));
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
-.fx .card{opacity:0;transform:translateY(60px) scale(.96);filter:blur(12px);transition:opacity 1s var(--enter),transform 1.2s var(--enter),filter 1s var(--enter)}
-.fx .card.in{opacity:1;transform:none;filter:blur(0)}
+.fx .card{opacity:0;transform:translateY(60px) scale(.96);transition:opacity 1s var(--enter),transform 1.2s var(--enter)}
+.fx .card.in{opacity:1;transform:none}
 .label{font:500 12.5px/1 var(--mono);color:var(--dye);letter-spacing:0;margin-bottom:14px;display:flex;align-items:center;gap:10px}
 .label::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--dye);box-shadow:0 0 10px var(--dye)}
 .card h2{font-weight:700;font-size:clamp(34px,4vw,56px);line-height:1.02;letter-spacing:-.034em}
@@ -185,10 +185,12 @@ main,footer,.nav{position:relative;z-index:2}
 .skills p{color:var(--muted);font-size:15px;margin-top:2px}
 
 /* ───────── exit ───────── */
-.exit{min-height:140vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding-block:30vh 12vh}
+.exit{position:relative;isolation:isolate;min-height:140vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding-block:30vh 12vh}
+.exit::before{content:"";position:absolute;z-index:-1;pointer-events:none;left:50%;top:50%;width:150vw;height:130vh;transform:translate(-50%,-42%);
+  background:radial-gradient(closest-side,rgba(4,6,10,.94) 0%,rgba(4,6,10,.86) 38%,rgba(4,6,10,.5) 66%,rgba(4,6,10,0) 100%)}
 .exit h2{font-weight:800;font-size:clamp(64px,13vw,200px);line-height:.88;letter-spacing:-.05em;
-  color:#fff4e2;text-shadow:0 0 60px rgba(255,184,77,.45),0 0 18px rgba(255,184,77,.35)}
-.exit .lead{font-family:var(--display);font-weight:600;font-size:clamp(19px,2vw,25px);line-height:1.34;letter-spacing:-.018em;color:var(--muted);max-width:40ch;margin:26px auto 0}
+  color:#fff6e8;text-shadow:0 2px 30px rgba(4,6,10,.9),0 0 70px rgba(255,184,77,.28)}
+.exit .lead{font-family:var(--display);font-weight:600;font-size:clamp(19px,2vw,25px);line-height:1.34;letter-spacing:-.018em;color:#aab5c1;max-width:40ch;margin:26px auto 0}
 .exit .actions{justify-content:center;margin-top:36px}
 .copy .lbl{display:grid}
 .copy .lbl>span{grid-area:1/1;transition:opacity .2s ease,filter .2s ease,transform .2s var(--out)}
@@ -221,9 +223,16 @@ footer a{text-decoration:none}
 .rail i{position:absolute;left:50%;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--dye);box-shadow:0 0 14px var(--dye)}
 .rail span{position:absolute;left:-3px;width:8px;height:1px;background:var(--muted)}
 
+/* Firefox repaints backdrop blur over a WebGL canvas every frame: use solid glass there */
+@supports (-moz-appearance:none){
+  .card{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(6,9,14,.92)}
+  .nav{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(4,6,10,.9)}
+  .hud{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(4,6,10,.88)}
+}
+
 /* ───────── cursor ───────── */
 .cursor{position:fixed;z-index:400;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;
-  border:1.5px solid rgba(255,226,176,.85);pointer-events:none;mix-blend-mode:difference;
+  border:1.5px solid rgba(255,226,176,.85);pointer-events:none;will-change:transform;
   transition:width .25s var(--out),height .25s var(--out),margin .25s var(--out),background-color .25s ease,opacity .25s ease;opacity:0}
 .cursor.on{opacity:1}
 .cursor.big{width:64px;height:64px;margin:-32px 0 0 -32px;background:rgba(255,226,176,.12)}
@@ -544,14 +553,16 @@ import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
 import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
 import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
+import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const SNAP=/[?&]snap/.test(location.search);
 const small=innerWidth<861;
+const FF=/firefox/i.test(navigator.userAgent);
 const canvas=document.getElementById('gl');
 let renderer;
 try{renderer=new THREE.WebGLRenderer({canvas,antialias:false,powerPreference:'high-performance'})}catch(e){throw e}
-renderer.setPixelRatio(Math.min(devicePixelRatio||1,small?1.5:1.75));
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,FF?1.25:(small?1.5:1.75)));
 renderer.setClearColor(0x04060a,1);
 
 const scene=new THREE.Scene();
@@ -589,12 +600,12 @@ function walk(start,dir,len,step,wobble,pull){
 }
 
 /* ── the vessel material: X-ray fresnel plus a contrast front ── */
-const U={uTime:{value:0},uInj:{value:new THREE.Vector4(-99,-99,-99,-99)},uSpeed:{value:240},uInside:{value:0},uFill:{value:0},uFog:{value:.0005}};
+const U={uTime:{value:0},uInj:{value:new THREE.Vector4(-99,-99,-99,-99)},uSpeed:{value:240},uInside:{value:0},uFill:{value:0},uFog:{value:.0005},uDim:{value:0}};
 const vesselMat=new THREE.ShaderMaterial({
   uniforms:U,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,
   vertexShader:`attribute float aD;varying float vD;varying vec3 vN;varying vec3 vV;
     void main(){vD=aD;vec4 mv=modelViewMatrix*vec4(position,1.);vV=mv.xyz;vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*mv;}`,
-  fragmentShader:`uniform float uTime;uniform vec4 uInj;uniform float uSpeed;uniform float uInside;uniform float uFill;uniform float uFog;
+  fragmentShader:`uniform float uTime;uniform vec4 uInj;uniform float uSpeed;uniform float uInside;uniform float uFill;uniform float uFog;uniform float uDim;
     varying float vD;varying vec3 vN;varying vec3 vV;
     float wv(float t0){float a=uTime-t0-vD/uSpeed;return a<0.?0.:min(1.,a/.12)*exp(-max(0.,a-1.8)/1.4);}
     float hd(float t0){float a=uTime-t0-vD/uSpeed;return (a>0.&&a<.4)?1.-a/.4:0.;}
@@ -616,29 +627,31 @@ const vesselMat=new THREE.ShaderMaterial({
       float dist=length(vV);
       float fog=exp(-dist*uFog);
       float nearFade=mix(1.,smoothstep(6.,60.,dist),uInside);
-      gl_FragColor=vec4(col*fog*nearFade,1.);
+      gl_FragColor=vec4(col*fog*nearFade*(1.-uDim),1.);
     }`
 });
 
 /* ── build the tree ── */
 const tree=new THREE.Group();scene.add(tree);
+const GEOS=[];
 const TRUNK_LEN=820;
 const trunk=walk(new THREE.Vector3(0,260,0),new THREE.Vector3(.35,-1,.25),TRUNK_LEN,46,.32,.1);
-tree.add(new THREE.Mesh(tube(trunk,small?420:700,small?18:26,10,4.6,0,TRUNK_LEN),vesselMat));
+GEOS.push(tube(trunk,small?420:700,small?18:26,10,4.6,0,TRUNK_LEN));
 function branchOff(parent,plen,pd0,u,r,len,depth){
   const P=parent.getPointAt(u),T=parent.getTangentAt(u);
   const rnd=new THREE.Vector3(R()-.5,R()-.5,R()-.5);const Q=rnd.cross(T).normalize();
   const ang=.75+R()*.45,dir=T.clone().multiplyScalar(Math.cos(ang)).addScaledVector(Q,Math.sin(ang)).normalize();
   const start=P.clone().addScaledVector(dir,r*.6);
   const c=walk(start,dir,len,30,.5,.06),d0=pd0+u*plen;
-  tree.add(new THREE.Mesh(tube(c,Math.round(len/(small?7:4.5)),small?10:14,r,r*.4,d0,len),vesselMat));
+  GEOS.push(tube(c,Math.round(len/(small?7:4.5)),small?10:14,r,r*.4,d0,len));
   if(depth<2){const k=depth===0?3:2;for(let i=0;i<k;i++)branchOff(c,len,d0,.25+R()*.55,r*.55,len*(.38+R()*.25),depth+1)}
 }
 for(let i=0;i<9;i++){const u=.08+i*.1+R()*.04,rr=(10+(4.6-10)*u)*.68;branchOff(trunk,TRUNK_LEN,0,u,rr,(320+R()*200)*(1-u*.45),0)}
 // circumflex from the same root
 const cx=walk(new THREE.Vector3(0,260,0),new THREE.Vector3(-1,-.55,-.2),560,40,.38,.08);
-tree.add(new THREE.Mesh(tube(cx,small?260:420,small?14:20,8,3.6,0,560),vesselMat));
+GEOS.push(tube(cx,small?260:420,small?14:20,8,3.6,0,560));
 for(let i=0;i<4;i++)branchOff(cx,560,0,.15+i*.2,5,260+R()*120,1);
+tree.add(new THREE.Mesh(mergeGeometries(GEOS,false),vesselMat));GEOS.forEach(g=>g.dispose());
 // the catheter arriving from above
 const cath=new THREE.CatmullRomCurve3([new THREE.Vector3(260,900,120),new THREE.Vector3(160,620,80),new THREE.Vector3(40,380,20),new THREE.Vector3(0,262,0)]);
 const cathMesh=new THREE.Mesh(tube(cath,80,12,5,5,-400,400),new THREE.MeshBasicMaterial({color:0x6a7f96,transparent:true,opacity:.35,blending:THREE.AdditiveBlending,depthWrite:false}));
@@ -652,6 +665,12 @@ const LOOK0=small?C.clone().add(new THREE.Vector3(0,-D*.34,0)):C.clone();
 const LN=1200,LP=[],LNm=[],LB=[];
 {const fr=trunk.computeFrenetFrames(LN,false);for(let i=0;i<=LN;i++){LP.push(trunk.getPointAt(i/LN));LNm.push(fr.normals[i]);LB.push(fr.binormals[i])}}
 function at(t,arr){t=Math.min(1,Math.max(0,t))*LN;const i=Math.min(LN-1,Math.floor(t)),f=t-i;return arr[i].clone().lerp(arr[i+1],f)}
+// flat copies for the per-frame particle loop: no Vector3 garbage
+const FP=new Float32Array((LN+1)*9);
+for(let i=0;i<=LN;i++){const o=i*9;FP[o]=LP[i].x;FP[o+1]=LP[i].y;FP[o+2]=LP[i].z;FP[o+3]=LNm[i].x;FP[o+4]=LNm[i].y;FP[o+5]=LNm[i].z;FP[o+6]=LB[i].x;FP[o+7]=LB[i].y;FP[o+8]=LB[i].z}
+const S0=at(0,LP),T0=at(.012,LP).sub(S0).normalize(),E0=S0.clone().addScaledVector(T0,-160),AHEAD0=at(.02,LP);
+const vO=new THREE.Vector3(),vA=new THREE.Vector3(),vB=new THREE.Vector3();
+function atInto(t,arr,out){t=Math.min(1,Math.max(0,t))*LN;const i=Math.min(LN-1,Math.floor(t)),f=t-i;return out.copy(arr[i]).lerp(arr[i+1],f)}
 const rAt=t=>10+(4.6-10)*t;
 
 /* guidewire just ahead of the camera */
@@ -666,7 +685,7 @@ pg.setAttribute('position',new THREE.BufferAttribute(pp,3));pg.setAttribute('aA'
 const PU={uOp:{value:0},uSize:{value:small?1.8:2.2}};
 const particles=new THREE.Points(pg,new THREE.ShaderMaterial({uniforms:PU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
   vertexShader:`attribute float aA;uniform float uSize;varying float vA;void main(){vA=aA;vec4 mv=modelViewMatrix*vec4(position,1.);gl_PointSize=min(26.,uSize*aA*(160./-mv.z));gl_Position=projectionMatrix*mv;}`,
-  fragmentShader:`uniform float uOp;varying float vA;void main(){float d=length(gl_PointCoord-.5);float a=smoothstep(.5,.0,d);gl_FragColor=vec4(vec3(1.,.66,.36)*a*a*uOp*vA,1.);}`}));
+  fragmentShader:`uniform float uOp;varying float vA;void main(){float d=length(gl_PointCoord-.5);float a=1.-smoothstep(0.,.5,d);gl_FragColor=vec4(vec3(1.,.66,.36)*a*a*uOp*vA,1.);}`}));
 particles.frustumCulled=false;scene.add(particles);
 
 /* faint scatter around the tree, like film grain in space */
@@ -676,7 +695,7 @@ sg.setAttribute('position',new THREE.BufferAttribute(sp,3));sg.setAttribute('aA'
 const SU={uOp:{value:.6},uSize:{value:2}};
 scene.add(new THREE.Points(sg,new THREE.ShaderMaterial({uniforms:SU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
   vertexShader:`attribute float aA;uniform float uSize;varying float vA;void main(){vA=aA;vec4 mv=modelViewMatrix*vec4(position,1.);gl_PointSize=uSize*aA*(600./-mv.z);gl_Position=projectionMatrix*mv;}`,
-  fragmentShader:`uniform float uOp;varying float vA;void main(){float d=length(gl_PointCoord-.5);float a=smoothstep(.5,.0,d);gl_FragColor=vec4(vec3(.6,.75,1.)*a*uOp*vA*.5,1.);}`})));
+  fragmentShader:`uniform float uOp;varying float vA;void main(){float d=length(gl_PointCoord-.5);float a=1.-smoothstep(0.,.5,d);gl_FragColor=vec4(vec3(.6,.75,1.)*a*uOp*vA*.5,1.);}`})));
 
 /* ── post: bloom makes the contrast burn ── */
 const composer=new EffectComposer(renderer);
@@ -687,7 +706,7 @@ composer.addPass(bloom);composer.addPass(new OutputPass());
 
 function resize(){
   const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);composer.setSize(w,h);
-  bloom.resolution.set(w/2,h/2);camera.aspect=w/h;camera.updateProjectionMatrix();measure();
+  bloom.resolution.set(w/(FF?3:2),h/(FF?3:2));camera.aspect=w/h;camera.updateProjectionMatrix();measure();
 }
 
 /* ── scroll choreography ── */
@@ -709,28 +728,27 @@ const camPos=new THREE.Vector3(),camLook=new THREE.Vector3(),tPos=new THREE.Vect
 let first=true,lastY=scrollY,vel=0,cathT=0,phase='orbit',inside01=0;
 const hud=document.getElementById('hud'),rail=document.getElementById('rail'),railDot=document.getElementById('railDot'),hDepth=document.getElementById('hDepth');
 
+const W_EXIT=new THREE.Vector3(C.x-D*.55,C.y+D*.25,C.z+D*.75);
 function orbit(t,out){
   const th=t*.06+mx*.9,ph=.18-my*.5;
   out.set(C.x+Math.sin(th)*Math.cos(ph)*D,C.y+Math.sin(ph)*D,C.z+Math.cos(th)*Math.cos(ph)*D);return out;
 }
 function target(t){
   const y=scrollY;
-  const S0=at(0,LP),T0=at(.012,LP).sub(S0).normalize();
   if(y<M.heroEnd){phase='orbit';inside01=0;orbit(t,tPos);tLook.copy(LOOK0);return}
   if(y<M.diveEnd){
     phase='dive';const s=ease(cl((y-M.heroEnd)/(M.diveEnd-M.heroEnd)));
-    const O=orbit(t,new THREE.Vector3()),E=S0.clone().addScaledVector(T0,-160),q=1-s;
-    tPos.set(0,0,0).addScaledVector(O,q*q).addScaledVector(E,2*q*s).addScaledVector(S0,s*s);
-    tLook.copy(LOOK0).lerp(at(.02,LP),s);inside01=cl((s-.75)/.25);return;
+    const O=orbit(t,vO),q=1-s;
+    tPos.set(0,0,0).addScaledVector(O,q*q).addScaledVector(E0,2*q*s).addScaledVector(S0,s*s);
+    tLook.copy(LOOK0).lerp(AHEAD0,s);inside01=cl((s-.75)/.25);return;
   }
   if(y<M.insideEnd){
     phase='inside';inside01=1;cathT=cl((y-M.diveEnd)/(M.insideEnd-M.diveEnd))*.9;
-    tPos.copy(at(cathT,LP));tLook.copy(at(cathT+.02,LP));return;
+    atInto(cathT,LP,tPos);atInto(cathT+.02,LP,tLook);return;
   }
   phase='exit';const s=ease(cl((y-M.insideEnd)/(M.exitEnd-M.insideEnd)));
-  const W=new THREE.Vector3(C.x-D*.55,C.y+D*.25,C.z+D*.75);
-  tPos.copy(at(.9,LP)).lerp(W,s);tLook.copy(at(.92,LP)).lerp(C,s);inside01=1-cl(s/.25);
-  U.uFill.value=s;
+  atInto(.9,LP,tPos).lerp(W_EXIT,s);atInto(.92,LP,tLook).lerp(C,s);inside01=1-cl(s/.25);
+  U.uFill.value=s;U.uDim.value=s*.5;
 }
 
 /* ── inject ── */
@@ -754,6 +772,7 @@ function drawEcg(t){
 /* ── loop ── */
 const clock=new THREE.Clock();
 function render(){
+  if(document.hidden){clock.getDelta();return}
   const dt=Math.min(.05,clock.getDelta()),t=U.uTime.value+=dt;
   mx+=(mouse.x-mx)*.04;my+=(mouse.y-my)*.04;
   const dy=scrollY-lastY;lastY=scrollY;vel+=(Math.abs(dy)/Math.max(dt,.001)-vel)*.08;
@@ -768,14 +787,17 @@ function render(){
   U.uInside.value+=(inside01-U.uInside.value)*(SNAP?1:.1);
   U.uFog.value=.00045+U.uInside.value*.0065;
   bloom.strength=bloomBase*(1-.68*U.uInside.value);
-  if(phase!=='exit')U.uFill.value*=.96;
+  if(phase!=='exit'){U.uFill.value*=.96;U.uDim.value*=.9}
   PU.uOp.value=U.uInside.value;SU.uOp.value=.6*(1-U.uInside.value);
   wire.material.opacity=U.uInside.value*.6;
   // particles stream towards the camera
   if(U.uInside.value>.02){
     const ct=phase==='inside'?cathT:(phase==='exit'?.9:0);
-    for(let i=0;i<PN;i++){const s=pseed[i],tt=ct+.004+(1-((s[0]+t*.05)%1))*.09,P=at(tt,LP),N=at(tt,LNm),B=at(tt,LB),r=rAt(cl(tt))*s[2],a=s[1]+t*.4;
-      pp[i*3]=P.x+(N.x*Math.cos(a)+B.x*Math.sin(a))*r;pp[i*3+1]=P.y+(N.y*Math.cos(a)+B.y*Math.sin(a))*r;pp[i*3+2]=P.z+(N.z*Math.cos(a)+B.z*Math.sin(a))*r}
+    for(let i=0;i<PN;i++){
+      const s=pseed[i],tt=cl(ct+.004+(1-((s[0]+t*.05)%1))*.09),x=tt*LN,k=Math.min(LN-1,x|0),f=x-k,o=k*9,q=o+9,g=1-f;
+      const r=rAt(tt)*s[2],a=s[1]+t*.4,ca=Math.cos(a)*r,sa=Math.sin(a)*r;
+      for(let c=0;c<3;c++)pp[i*3+c]=(FP[o+c]*g+FP[q+c]*f)+(FP[o+3+c]*g+FP[q+3+c]*f)*ca+(FP[o+6+c]*g+FP[q+6+c]*f)*sa;
+    }
     pg.attributes.position.needsUpdate=true;
   }
   // heartbeat
