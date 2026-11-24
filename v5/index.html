@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Iusup Abduliaparov, C# / Unity simulation engineer</title>
+<meta name="description" content="C# / Unity simulation engineer in Milan. I build the software inside a coronary angiography training simulator. Previously co-founded Aviana Studios and shipped nine WebGL games, one played by nearly 10M people.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Iusup Abduliaparov, C# / Unity simulation engineer">
+<meta property="og:description" content="Scroll and the catheter goes in. Medical training simulation, real-time 3D and physics in Unity.">
+<meta property="og:url" content="https://kanopuster.github.io/v5/">
+<meta property="og:image" content="https://kanopuster.github.io/media/angio.png">
+<meta name="theme-color" content="#04060a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%2304060a'/%3E%3Cpath d='M10 4c0 9 3 9 6 13s2 7 2 11M16 17c3-2 6-2 8-6' fill='none' stroke='%23ffb84d' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+/* SF Pro on Apple devices; Inter (optical sizes) as the closest open face elsewhere */
+@font-face{font-family:'Inter';src:url(../glass/fonts/inter.woff2) format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#04060a;
+  --ink:#eef2f6;
+  --muted:#93a0ad;
+  --hair:rgba(238,242,246,.12);
+  --glass:rgba(6,9,14,.74);
+  --dye:#ffb84d;
+  --dye-2:#ffe2b0;
+  --live:#5fd08f;
+  --display:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter',system-ui,sans-serif;
+  --text:-apple-system,BlinkMacSystemFont,'SF Pro Text','Inter',system-ui,sans-serif;
+  --mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,Consolas,monospace;
+  --gutter:clamp(20px,5vw,64px);
+  --out:cubic-bezier(.23,1,.32,1);
+  --enter:cubic-bezier(.22,1,.36,1);
+  --fast:150ms;
+  color-scheme:dark;
+}
+html{-webkit-text-size-adjust:100%;scroll-padding-top:64px;scrollbar-color:rgba(238,242,246,.2) transparent;accent-color:var(--dye)}
+body{
+  background:radial-gradient(80% 60% at 60% 30%,#0b1420 0%,var(--bg) 70%) fixed,var(--bg);color:var(--ink);
+  font:400 17px/1.53 var(--text);letter-spacing:-.012em;font-optical-sizing:auto;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;
+  caret-color:var(--dye);overflow-x:clip;
+}
+img,video{display:block;max-width:100%}
+a{color:inherit;text-underline-offset:.22em;text-decoration-thickness:1px}
+p,li,dd{text-wrap:pretty}
+h1,h2,h3{text-wrap:balance;font-family:var(--display)}
+::selection{background:var(--dye);color:var(--bg)}
+:focus-visible{outline:2px solid var(--dye);outline-offset:3px;border-radius:8px}
+.skip{position:absolute;left:-999px;top:10px;z-index:300;background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:10px}
+.skip:focus{left:10px}
+.wrap{max-width:calc(1240px + var(--gutter)*2);margin:0 auto;padding:0 var(--gutter)}
+
+/* ───────── the 3D layer ───────── */
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;opacity:0;transition:opacity 1.4s ease;display:block}
+.gl-on #gl{opacity:1}
+.vignette{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(120% 90% at 50% 50%,transparent 45%,rgba(0,0,0,.6) 100%)}
+main,footer,.nav{position:relative;z-index:2}
+
+/* ───────── nav ───────── */
+.nav{
+  position:fixed;z-index:100;inset:0 0 auto;height:56px;
+  background:color-mix(in srgb,var(--bg) 55%,transparent);
+  -webkit-backdrop-filter:saturate(160%) blur(16px);backdrop-filter:saturate(160%) blur(16px);
+  border-bottom:1px solid var(--hair);
+}
+.nav .wrap{height:100%;display:flex;align-items:center;gap:4px}
+.nav a{
+  display:inline-flex;align-items:center;height:36px;padding:0 12px;border-radius:999px;
+  font:500 14px/1 var(--text);letter-spacing:-.01em;text-decoration:none;color:var(--muted);
+  transition:color var(--fast) ease,background-color var(--fast) ease,transform var(--fast) var(--out);
+}
+.nav .me{color:var(--ink);font-family:var(--display);font-weight:600;letter-spacing:-.02em;padding-left:0;margin-right:auto}
+.nav .cv{background:var(--ink);color:var(--bg);margin-left:8px;padding:0 15px}
+.nav a:active{transform:scale(.97)}
+.nav a[aria-current]{color:var(--ink)}
+@media (hover:hover) and (pointer:fine){.nav a:not(.me):not(.cv):hover{color:var(--ink)}.nav .cv:hover{background:#fff}}
+.progress{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:linear-gradient(90deg,var(--dye),var(--dye-2));transform-origin:0 50%;transform:scaleX(0);box-shadow:0 0 12px var(--dye)}
+
+/* ───────── buttons ───────── */
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.btn{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:52px;padding:0 26px;border-radius:999px;
+  font:500 16px/1 var(--text);letter-spacing:-.012em;text-decoration:none;
+  background:var(--ink);color:var(--bg);border:0;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:background-color var(--fast) ease,transform .35s var(--out),box-shadow .35s var(--out);
+}
+.btn.quiet{background:rgba(238,242,246,.08);color:var(--ink);box-shadow:inset 0 0 0 1px var(--hair)}
+.btn.dye{background:var(--dye);color:#1a0f00;box-shadow:0 10px 40px -10px rgba(255,184,77,.7)}
+.btn:active{transform:scale(.97)!important}
+@media (hover:hover) and (pointer:fine){.btn:hover{background:#fff}.btn.quiet:hover{background:rgba(238,242,246,.16)}.btn.dye:hover{background:var(--dye-2)}}
+
+/* split letters, blur to sharp */
+.wd{display:inline-block;white-space:nowrap}
+.fx .split .ch{display:inline-block;opacity:0;transform:translateY(.4em) rotate(4deg);filter:blur(14px);animation:ch .9s var(--enter) forwards;animation-delay:calc(var(--i) * 32ms + var(--d,0ms))}
+@keyframes ch{to{opacity:1;transform:none;filter:blur(0)}}
+.fx .up{opacity:0;transform:translateY(16px);animation:up .7s var(--enter) forwards;animation-delay:var(--d,0ms)}
+@keyframes up{to{opacity:1;transform:none}}
+
+/* ───────── hero ───────── */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding-block:120px clamp(40px,8vh,80px)}
+.status{display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:500;color:var(--muted);margin-bottom:20px}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--live);box-shadow:0 0 10px var(--live)}
+.hero h1{font-weight:700;font-size:clamp(56px,10.4vw,156px);line-height:.92;letter-spacing:-.045em;margin-left:-.05em}
+.hero h1 .l2{display:block}
+.hero-foot{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px 48px;align-items:end;margin-top:clamp(24px,4vh,40px)}
+.hero .lead{font-family:var(--display);font-weight:600;font-size:clamp(21px,2.2vw,28px);line-height:1.28;letter-spacing:-.02em;color:var(--muted);max-width:32ch}
+.hero .lead strong{color:var(--ink);font-weight:600}
+.hero h1,.hero .lead,.hero .status,.hint{text-shadow:0 2px 28px rgba(4,6,10,.85)}
+.hint{display:flex;align-items:center;gap:14px;margin-top:26px;font:500 12.5px/1.4 var(--mono);color:var(--muted);letter-spacing:0}
+.hint .mouse{width:20px;height:30px;border:1.5px solid var(--muted);border-radius:12px;position:relative;flex:none}
+.hint .mouse::after{content:"";position:absolute;left:50%;top:6px;width:2px;height:6px;margin-left:-1px;border-radius:2px;background:var(--dye);animation:wheel 1.8s var(--out) infinite}
+@keyframes wheel{0%{opacity:0;transform:translateY(-2px)}30%{opacity:1}100%{opacity:0;transform:translateY(9px)}}
+
+/* ───────── manifesto ───────── */
+.dive{min-height:120vh;display:flex;align-items:center}
+.dive p{font-family:var(--display);font-weight:700;font-size:clamp(34px,5.6vw,84px);line-height:1.04;letter-spacing:-.035em;max-width:16ch}
+.fx .dive .w{opacity:.12;transition:opacity .15s linear}
+.dive .w.hl{color:var(--dye);text-shadow:0 0 30px rgba(255,184,77,.45)}
+
+/* ───────── panels flying past in the tunnel ───────── */
+.panel{min-height:150vh;display:flex;align-items:center;padding-block:20vh}
+.panel.right .card{margin-left:auto}
+.card{
+  position:relative;width:min(100%,600px);padding:clamp(24px,3vw,40px);border-radius:28px;
+  background:var(--glass);border:1px solid var(--hair);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);
+  box-shadow:0 40px 120px -40px rgba(0,0,0,.8);
+}
+.card::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;
+  background:linear-gradient(140deg,rgba(255,184,77,.55),transparent 35%,transparent 70%,rgba(160,200,255,.3));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.fx .card{opacity:0;transform:translateY(60px) scale(.96);filter:blur(12px);transition:opacity 1s var(--enter),transform 1.2s var(--enter),filter 1s var(--enter)}
+.fx .card.in{opacity:1;transform:none;filter:blur(0)}
+.label{font:500 12.5px/1 var(--mono);color:var(--dye);letter-spacing:0;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.label::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--dye);box-shadow:0 0 10px var(--dye)}
+.card h2{font-weight:700;font-size:clamp(34px,4vw,56px);line-height:1.02;letter-spacing:-.034em}
+.card h2+p{margin-top:12px;color:var(--muted);font-size:17.5px}
+.film{margin-top:22px;border-radius:16px;overflow:hidden;background:#000;border:1px solid var(--hair)}
+.film video,.film img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 24px;margin-top:24px}
+.specs dt{font-family:var(--display);font-weight:600;font-size:19px;letter-spacing:-.018em}
+.specs dd{color:var(--muted);font-size:15px;margin-top:3px}
+.stack{margin-top:20px;font-size:14.5px;color:var(--muted)}
+.stack b{color:var(--ink);font-weight:500}
+.game+.game{margin-top:30px;padding-top:30px;border-top:1px solid var(--hair)}
+.game .row{display:grid;grid-template-columns:132px minmax(0,1fr);gap:18px;align-items:start}
+.game .thumb{border-radius:12px;overflow:hidden;aspect-ratio:1;background:#0c1118}
+.game .thumb>*{width:100%;height:100%;object-fit:cover}
+.game h3{font-weight:700;font-size:22px;letter-spacing:-.022em;line-height:1.15}
+.game .from{font-size:13.5px;color:var(--muted);margin-top:2px}
+.game p{color:var(--muted);font-size:15px;margin-top:8px}
+.game p b{color:var(--ink);font-weight:500}
+.nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:18px}
+.nums.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.nums dt{font-family:var(--display);font-weight:700;font-size:clamp(24px,2.4vw,32px);line-height:1.1;letter-spacing:-.03em;font-variant-numeric:tabular-nums;white-space:nowrap;
+  color:#fff4e2;text-shadow:0 0 24px rgba(255,184,77,.35)}
+.nums dt small{font-size:max(13px,.42em);font-weight:600;color:var(--muted);text-shadow:none;margin:0 .12em}
+.nums dd{font-size:13px;color:var(--muted);margin-top:3px;line-height:1.3}
+.chip{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border-radius:999px;margin-top:14px;margin-right:6px;
+  background:rgba(238,242,246,.08);font-size:13.5px;font-weight:500;text-decoration:none;transition:background-color var(--fast) ease,transform var(--fast) var(--out)}
+.chip svg{width:12px;height:12px;transition:transform var(--fast) var(--out)}
+.chip:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){.chip:hover{background:rgba(238,242,246,.16)}.chip:hover svg{transform:translate(2px,-2px)}}
+
+/* odometer digits */
+.odo{display:inline-block;height:1.1em;overflow:hidden;vertical-align:top}
+.reel{display:block;transition:transform 1.8s var(--enter);transition-delay:calc(var(--k) * 80ms + .2s)}
+.reel span{display:block;height:1.1em;line-height:1.1em}
+.in .reel{transform:translateY(calc(var(--n) * -1.1em))}
+.rm .reel{transition:none}
+
+.roles{list-style:none;margin-top:22px;display:grid;gap:26px}
+.when{font:500 12.5px/1.6 var(--mono);color:var(--dye);letter-spacing:0}
+.roles h3{font-weight:600;font-size:22px;letter-spacing:-.02em;line-height:1.15;margin-top:4px}
+.org{color:var(--muted);font-size:14.5px;margin:2px 0 10px}
+.roles ul{list-style:none;display:grid;gap:7px}
+.roles li li{position:relative;padding-left:18px;color:var(--muted);font-size:15px;line-height:1.5}
+.roles li li b{color:var(--ink);font-weight:500}
+.roles li li::before{content:"";position:absolute;left:1px;top:.7em;width:8px;height:2px;border-radius:2px;background:var(--dye)}
+.skills{list-style:none;margin-top:20px}
+.skills li{padding:14px 0;border-top:1px solid var(--hair)}
+.skills h3{font-weight:600;font-size:18px;letter-spacing:-.018em}
+.skills p{color:var(--muted);font-size:15px;margin-top:2px}
+
+/* ───────── exit ───────── */
+.exit{min-height:140vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding-block:30vh 12vh}
+.exit h2{font-weight:800;font-size:clamp(64px,13vw,200px);line-height:.88;letter-spacing:-.05em;
+  color:#fff4e2;text-shadow:0 0 60px rgba(255,184,77,.45),0 0 18px rgba(255,184,77,.35)}
+.exit .lead{font-family:var(--display);font-weight:600;font-size:clamp(19px,2vw,25px);line-height:1.34;letter-spacing:-.018em;color:var(--muted);max-width:40ch;margin:26px auto 0}
+.exit .actions{justify-content:center;margin-top:36px}
+.copy .lbl{display:grid}
+.copy .lbl>span{grid-area:1/1;transition:opacity .2s ease,filter .2s ease,transform .2s var(--out)}
+.copy .lbl .b{opacity:0;filter:blur(4px);transform:translateY(4px)}
+.copy.done .lbl .a{opacity:0;filter:blur(4px);transform:translateY(-4px)}
+.copy.done .lbl .b{opacity:1;filter:blur(0);transform:none}
+.elsewhere{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px;margin-top:40px;font-size:15px;color:var(--muted)}
+.elsewhere a{text-decoration:none}
+@media (hover:hover) and (pointer:fine){.elsewhere a:hover{color:var(--ink);text-decoration:underline}}
+
+footer{border-top:1px solid var(--hair);background:rgba(4,6,10,.7)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding-top:26px;padding-bottom:36px;font-size:14px;color:var(--muted)}
+footer nav{display:flex;flex-wrap:wrap;gap:8px 20px}
+footer a{text-decoration:none}
+@media (hover:hover) and (pointer:fine){footer a:hover{color:var(--ink);text-decoration:underline}}
+
+/* ───────── HUD: what an angio monitor would show ───────── */
+.hud{position:fixed;z-index:20;left:50%;bottom:18px;width:min(440px,calc(100vw - 40px));margin-left:calc(min(440px,calc(100vw - 40px)) / -2);display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:16px;padding:8px 16px;border-radius:999px;
+  background:rgba(4,6,10,.6);border:1px solid var(--hair);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  font:500 11.5px/1.5 var(--mono);color:var(--muted);letter-spacing:0;font-variant-numeric:tabular-nums;
+  opacity:0;transform:translateY(10px);transition:opacity .5s var(--out),transform .5s var(--out);pointer-events:none}
+.hud.on{opacity:1;transform:none}
+.hud{transform:translateY(10px)}
+.hud .r{display:flex;gap:6px;white-space:nowrap}
+.hud b{color:var(--ink);font-weight:600}
+.hud .hr b{color:var(--live)}.hud .ml b{color:var(--dye)}
+#ecg{display:block;width:100%;height:26px}
+.rail{position:fixed;z-index:20;right:22px;top:50%;height:44vh;width:2px;transform:translateY(-50%);background:var(--hair);border-radius:2px;opacity:0;transition:opacity .5s var(--out)}
+.rail.on{opacity:1}
+.rail i{position:absolute;left:50%;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--dye);box-shadow:0 0 14px var(--dye)}
+.rail span{position:absolute;left:-3px;width:8px;height:1px;background:var(--muted)}
+
+/* ───────── cursor ───────── */
+.cursor{position:fixed;z-index:400;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;
+  border:1.5px solid rgba(255,226,176,.85);pointer-events:none;mix-blend-mode:difference;
+  transition:width .25s var(--out),height .25s var(--out),margin .25s var(--out),background-color .25s ease,opacity .25s ease;opacity:0}
+.cursor.on{opacity:1}
+.cursor.big{width:64px;height:64px;margin:-32px 0 0 -32px;background:rgba(255,226,176,.12)}
+.cursor::after{content:attr(data-label);position:absolute;left:50%;top:calc(100% + 8px);transform:translateX(-50%);white-space:nowrap;font:600 11px/1 var(--mono);color:#ffe2b0;letter-spacing:0}
+
+@media (max-width:860px){
+  .nav .lnk{display:none}
+  .hero-foot{grid-template-columns:minmax(0,1fr)}
+  .panel{min-height:auto;padding-block:16vh}
+  .card{width:100%}
+  .specs{grid-template-columns:minmax(0,1fr)}
+  .nums{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .game .row{grid-template-columns:88px minmax(0,1fr)}
+  .hud{display:none}
+  .rail{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-property:opacity,color,background-color!important}
+}
+</style>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+</script>
+</head>
+<body>
+<a class="skip" href="#simulator">Skip to work</a>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="me" href="#top">Iusup Abduliaparov</a>
+    <a class="lnk" href="#simulator">Simulator</a>
+    <a class="lnk" href="#games">Games</a>
+    <a class="lnk" href="#experience">Experience</a>
+    <a class="lnk" href="#contact">Contact</a>
+    <a class="cv" href="../Iusup_Abduliaparov_CV_CSharp_Simulation_Engineer.pdf" download>CV</a>
+  </div>
+  <span class="progress" id="progress" aria-hidden="true"></span>
+</nav>
+
+<main id="top">
+  <header class="hero wrap" id="hero">
+    <p class="status up" style="--d:200ms"><i></i>Open to new roles. Milan, willing to relocate</p>
+    <h1><span class="split" style="--d:250ms">Iusup</span><span class="split l2" style="--d:420ms">Abduliaparov</span></h1>
+    <div class="hero-foot">
+      <div>
+        <p class="lead up" style="--d:900ms"><strong>C# / Unity simulation engineer.</strong> I build the software inside a coronary angiography training simulator.</p>
+        <p class="hint up" style="--d:1100ms"><span class="mouse" aria-hidden="true"></span><span>Click the vessels to inject contrast.<br>Scroll, and the catheter goes in.</span></p>
+      </div>
+      <div class="actions up" style="--d:1000ms">
+        <button class="btn dye mag" type="button" id="inject">Inject contrast</button>
+        <a class="btn quiet mag" href="#contact">Get in touch</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="dive wrap" aria-label="About">
+    <p id="manifest">Medical students and clinicians practise on a physical training unit. I write the software that puts the X-ray image on its screen. Let's go inside.</p>
+  </section>
+
+  <div id="inside">
+    <section class="panel wrap" id="simulator">
+      <article class="card">
+        <p class="label">Depth 0 to 30 mm · in development</p>
+        <h2 class="scr">Inside the simulator</h2>
+        <p>A commercial coronary angiography trainer for a large international medical company. I write the Unity software behind it.</p>
+        <figure class="film"><video data-rate="1.25" src="../media/angio.mp4" poster="../media/angio.png" muted loop playsinline preload="metadata" aria-label="X-ray-style view of a catheter and contrast flow in the simulator"></video></figure>
+        <dl class="specs">
+          <div><dt>Hardware</dt><dd>Device detection, live control data, calibration, catheter and guidewire motion in sync with the unit.</dd></div>
+          <div><dt>Imaging</dt><dd>X-ray-style rendering with contrast flow, DSA road-mapping, breathing and heartbeat.</dd></div>
+          <div><dt>Physics</dt><dd>Catheters, guidewires, balloons and stents that react to bends, branches and narrowing.</dd></div>
+          <div><dt>Cases</dt><dd>Stenosis navigation, angioplasty, stent placement.</dd></div>
+        </dl>
+        <p class="stack"><b>Built with</b> Unity, C#, URP, ShaderLab / HLSL, Burst, Windows</p>
+      </article>
+    </section>
+
+    <section class="panel right wrap" id="games">
+      <article class="card">
+        <p class="label">Depth 30 to 60 mm · Aviana Studios</p>
+        <h2 class="scr">Games that shipped</h2>
+        <p>Three projects from the studio I co-founded. Numbers from production builds.</p>
+        <div class="game">
+          <div class="row">
+            <div class="thumb"><img src="../glass/megaramp-poster.jpg" alt="Mega Ramp Stunt" loading="lazy" decoding="async"></div>
+            <div>
+              <h3>Mega Ramp Stunt</h3><p class="from">Live, web and Android</p>
+              <p>A <b>custom Rigidbody controller</b> replaced the joint-based prototype, then build and frame time were cut until it ran on low-end phones.</p>
+            </div>
+          </div>
+          <dl class="nums">
+            <div><dt data-odo="~10M">~10M</dt><dd>players</dd></div>
+            <div><dt data-odo="40k">40k</dt><dd>peak DAU</dd></div>
+            <div><dt>100<small>to</small><span data-odo="20">20</span></dt><dd>MB WebGL build</dd></div>
+            <div><dt>15<small>to</small><span data-odo="60">60</span></dt><dd>FPS, low-end Android</dd></div>
+          </dl>
+          <a class="chip" href="https://playgama.com/game/mega-ramp-stunt" target="_blank" rel="noopener">Play in the browser <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a>
+        </div>
+        <div class="game">
+          <div class="row">
+            <div class="thumb"><img src="../media/quarantine.avif" alt="Quarantine Zone Mobile" loading="lazy" decoding="async"></div>
+            <div>
+              <h3>Quarantine Zone Mobile</h3><p class="from">Live, publisher contract</p>
+              <p>Environment rebuilt with <b>mesh decimation, LODs and silhouette-preserving proxies</b>; post-processing moved into one pass.</p>
+            </div>
+          </div>
+          <dl class="nums two">
+            <div><dt>1M<small>to</small><span data-odo="40k">40k</span></dt><dd>environment triangles, approx.</dd></div>
+            <div><dt data-odo="60">60</dt><dd>FPS, stable on low-end Android</dd></div>
+          </dl>
+          <a class="chip" href="https://playgama.com/game/zombie-check-survival-shelter" target="_blank" rel="noopener">Play the WebGL build <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a>
+        </div>
+        <div class="game">
+          <div class="row">
+            <div class="thumb"><img src="../media/obby.webp" alt="Obby Island" loading="lazy" decoding="async"></div>
+            <div>
+              <h3>Nine games, one codebase</h3><p class="from">Live, Playgama and Yandex Games</p>
+              <p>Nine standalone WebGL titles from a single Unity project, sharing <b>services, state machine and save layer</b>.</p>
+            </div>
+          </div>
+          <a class="chip" href="https://play.google.com/store/apps/details?id=obby.island.build&amp;hl=en" target="_blank" rel="noopener">Google Play <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a>
+          <a class="chip" href="https://playhop.com/developer/117274" target="_blank" rel="noopener">All WebGL games <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 11 11 5M6 5h5v5"/></svg></a>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel wrap" id="experience">
+      <article class="card">
+        <p class="label">Depth 60 to 90 mm · three years</p>
+        <h2 class="scr">Experience</h2>
+        <ol class="roles">
+          <li>
+            <p class="when">Nov 2025 to now · contract, full-time</p>
+            <h3>C# / Unity simulation engineer</h3>
+            <p class="org">Medical technology company</p>
+            <ul>
+              <li><b>Connected Unity to the physical training unit:</b> device detection, real-time control data, calibration, catheter and guidewire movement in sync with the hardware.</li>
+              <li><b>Built diagnostic and treatment cases:</b> stenosis navigation, balloon angioplasty, stent placement, follow-up contrast imaging.</li>
+              <li><b>Created the X-ray-style graphics:</b> contrast flow, DSA road-mapping, breathing and heartbeat.</li>
+              <li><b>Developed catheter, guidewire, balloon and stent physics</b> that react to bends, branches, narrowing and the moving vessel wall.</li>
+            </ul>
+          </li>
+          <li>
+            <p class="when">2023 to Apr 2026 · remote</p>
+            <h3>Co-founder and Unity engineering lead</h3>
+            <p class="org">Aviana Studios, WebGL and mobile games</p>
+            <ul>
+              <li><b>Hired and led three programmers</b> and worked with the game designer and producer.</li>
+              <li><b>Shipped nine standalone WebGL titles</b> from a shared C# codebase; one reached nearly 10M players.</li>
+              <li><b>Ported Android games to WebGL</b> through one architecture for input, UI, saves and services.</li>
+              <li><b>Cut a WebGL build from 100 MB to 20 MB</b> and took low-end Android from about 15 FPS to 60.</li>
+            </ul>
+          </li>
+        </ol>
+      </article>
+    </section>
+
+    <section class="panel right wrap" id="skills">
+      <article class="card">
+        <p class="label">Depth 90 to 120 mm · toolkit</p>
+        <h2 class="scr">Skills</h2>
+        <ul class="skills">
+          <li><h3>Medical simulation</h3><p>Hardware integration, calibration, X-ray visualisation, contrast flow, catheter and guidewire physics.</p></li>
+          <li><h3>Core</h3><p>C#, Unity, URP, ShaderLab / HLSL, Burst. Windows, WebGL and Android.</p></li>
+          <li><h3>Architecture</h3><p>SOLID, VContainer, state machines, ScriptableObjects, R3, UniTask, cross-platform codebases.</p></li>
+          <li><h3>Performance</h3><p>Profiler and Memory Profiler, GC reduction, pooling, batching, LODs, build size.</p></li>
+          <li><h3>Leading a team</h3><p>Hiring, leading three programmers, game design and production, Git workflows.</p></li>
+        </ul>
+      </article>
+    </section>
+  </div>
+
+  <section class="exit wrap" id="contact">
+    <h2 class="split later" id="cta">Hiring?</h2>
+    <p class="lead">I work full-time today and I'm open to C# / Unity simulation, medical training, industrial XR and real-time 3D roles. Based in Milan, willing to relocate.</p>
+    <div class="actions">
+      <a class="btn dye mag" href="mailto:yusup.abdulyaparov@gmail.com">Email me</a>
+      <button class="btn quiet copy mag" id="copy" type="button" data-email="yusup.abdulyaparov@gmail.com"><span class="lbl"><span class="a">Copy email</span><span class="b">Copied</span></span></button>
+      <a class="btn quiet mag" href="https://www.linkedin.com/in/iusup-abduliaparov/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <p class="elsewhere">
+      <a href="../Iusup_Abduliaparov_CV_CSharp_Simulation_Engineer.pdf" download>Download CV (PDF)</a>
+      <a href="../cv.html">CV online</a>
+      <a href="https://github.com/Kanopuster" target="_blank" rel="noopener">GitHub</a>
+      <span>English, Russian</span>
+    </p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Iusup Abduliaparov. Rendered live with WebGL.</span>
+    <nav aria-label="Other versions"><a href="../v4/">X-ray version</a><a href="../v3/">Motion version</a><a href="../v2/">Product version</a><a href="../glass/">Liquid glass version</a></nav>
+  </div>
+</footer>
+
+<div class="hud" id="hud" aria-hidden="true">
+  <div class="r"><span>Depth</span><span><b id="hDepth">0</b> mm</span></div>
+  <canvas id="ecg"></canvas>
+  <div class="r hr"><span>HR</span><span><b>72</b> bpm</span></div>
+  <div class="r ml"><span>Contrast</span><span><b id="hMl">0</b> ml</span></div>
+</div>
+<div class="rail" id="rail" aria-hidden="true"><span style="top:0"></span><span style="top:25%"></span><span style="top:50%"></span><span style="top:75%"></span><span style="top:100%"></span><i id="railDot"></i></div>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+
+<!-- interface (works without WebGL) -->
+<script>
+(function(){
+'use strict';
+var root=document.documentElement;
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var fine=matchMedia('(hover: hover) and (pointer: fine)').matches;
+root.classList.add(reduce?'rm':'fx');
+var $=function(s){return document.querySelector(s)},$$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+function clamp(v,a,b){return v<a?a:v>b?b:v}
+
+/* letters */
+$$('.split').forEach(function(el){
+  var text=el.textContent.trim(),i=0;el.setAttribute('aria-label',text);el.textContent='';
+  text.split(/\s+/).forEach(function(w,wi,all){
+    var ws=document.createElement('span');ws.className='wd';ws.setAttribute('aria-hidden','true');
+    for(var c=0;c<w.length;c++){var s=document.createElement('span');s.className='ch';s.textContent=w[c];s.style.setProperty('--i',i++);ws.appendChild(s)}
+    el.appendChild(ws);if(wi<all.length-1)el.appendChild(document.createTextNode(' '));
+  });
+});
+var laterCss=document.createElement('style');laterCss.textContent='.fx .split.later .ch{animation-play-state:paused}.fx .split.later.in .ch{animation-play-state:running}';document.head.appendChild(laterCss);
+
+/* manifesto words */
+var man=$('#manifest'),words=[];
+(function(){var t=man.textContent.replace(/\s+/g,' ').trim();man.textContent='';
+  t.split(' ').forEach(function(w,i,a){var s=document.createElement('span');s.className='w'+(/X-ray|image|inside/.test(w)?' hl':'');s.textContent=w;man.appendChild(s);if(i<a.length-1)man.appendChild(document.createTextNode(' '));words.push(s)})})();
+
+/* odometers */
+$$('[data-odo]').forEach(function(el){
+  var txt=el.getAttribute('data-odo'),k=0;el.setAttribute('aria-label',el.textContent);el.textContent='';
+  for(var c=0;c<txt.length;c++){var ch=txt[c];
+    if(/\d/.test(ch)){var o=document.createElement('span');o.className='odo';o.setAttribute('aria-hidden','true');
+      var reel=document.createElement('span');reel.className='reel';reel.style.setProperty('--k',k++);reel.style.setProperty('--n',10+(+ch));
+      var h='';for(var d=0;d<20;d++)h+='<span>'+(d%10)+'</span>';reel.innerHTML=h;o.appendChild(reel);el.appendChild(o)}
+    else{var s=document.createElement('span');s.setAttribute('aria-hidden','true');s.textContent=ch;el.appendChild(s)}}
+});
+
+/* headings decode out of noise */
+var GLYPHS='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789<>/#%';
+function scramble(el){
+  var fin=el.dataset.text,f=0,total=28;
+  (function step(){f++;var out='';
+    for(var i=0;i<fin.length;i++){var ok=i<(f/total)*fin.length*1.25-2;out+=fin[i]===' '?' ':ok?fin[i]:GLYPHS[Math.random()*GLYPHS.length|0]}
+    el.textContent=out;if(f<total+4)requestAnimationFrame(step);else el.textContent=fin})();
+}
+$$('.scr').forEach(function(h){h.dataset.text=h.textContent;h.setAttribute('aria-label',h.textContent)});
+
+/* cards and big CTA arrive */
+if('IntersectionObserver' in window&&!reduce){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var t=e.target;t.classList.add('in');var h=t.querySelector('.scr');if(h)scramble(h);io.unobserve(t)})},{threshold:.18});
+  $$('.card,.split.later').forEach(function(c){io.observe(c)});
+}else $$('.card,.split.later').forEach(function(c){c.classList.add('in')});
+
+/* manifesto + nav progress */
+var prog=$('#progress'),lnks=$$('.nav .lnk'),secs=$$('main section[id]');
+function frame(){
+  var H=innerHeight,max=root.scrollHeight-H;
+  prog.style.transform='scaleX('+(max>0?clamp(scrollY/max,0,1):0).toFixed(4)+')';
+  if(!reduce){var r=man.getBoundingClientRect(),p=clamp((H*.85-r.top)/(r.height+H*.25),0,1),n=words.length;
+    for(var i=0;i<n;i++){var a=(.12+.88*clamp(p*n*1.1-i,0,1)).toFixed(3);if(words[i]._a!==a){words[i]._a=a;words[i].style.opacity=a}}}
+  var y=scrollY+H*.45,cur=null;secs.forEach(function(s){if(s.offsetTop<=y)cur=s.id});
+  lnks.forEach(function(l){if(l.getAttribute('href')==='#'+cur)l.setAttribute('aria-current','true');else l.removeAttribute('aria-current')});
+}
+var tick=false;addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(function(){tick=false;frame()})}},{passive:true});
+addEventListener('resize',frame);frame();
+
+/* inject: the 3D layer listens; the HUD counts millilitres */
+var ml=0;
+function inject(){ml+=5;var h=$('#hMl');if(h)h.textContent=ml;dispatchEvent(new CustomEvent('inject'))}
+window.__inject=inject;
+$('#inject').addEventListener('click',inject);
+
+/* cursor and magnetic buttons */
+if(fine&&!reduce){
+  var cur=$('#cursor'),mx=-100,my=-100,cx=-100,cy=-100;
+  addEventListener('pointermove',function(e){mx=e.clientX;my=e.clientY;cur.classList.add('on');
+    var t=e.target,hot=t.closest&&t.closest('a,button');
+    cur.classList.toggle('big',!!hot);
+    cur.dataset.label=hot?'':(t===document.body||t.id==='gl'||t.closest&&t.closest('.hero,.dive,.exit')&&!t.closest('p,h1,h2'))&&scrollY<innerHeight*.8?'click to inject':'';
+  },{passive:true});
+  document.addEventListener('pointerleave',function(){cur.classList.remove('on')});
+  (function loop(){cx+=(mx-cx)*.22;cy+=(my-cy)*.22;cur.style.transform='translate3d('+cx.toFixed(1)+'px,'+cy.toFixed(1)+'px,0)';requestAnimationFrame(loop)})();
+  $$('.mag').forEach(function(b){
+    b.addEventListener('pointermove',function(e){var r=b.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);b.style.transform='translate('+(dx*.22).toFixed(1)+'px,'+(dy*.3).toFixed(1)+'px)'});
+    b.addEventListener('pointerleave',function(){b.style.transform=''});
+  });
+  /* click on empty space in the hero injects */
+  addEventListener('pointerdown',function(e){if(scrollY>innerHeight*.8)return;var t=e.target;if(t.closest('a,button,p,h1,h2,nav'))return;inject()});
+}else{
+  addEventListener('pointerdown',function(e){if(scrollY>innerHeight*.8)return;var t=e.target;if(t.closest('a,button,nav'))return;inject()});
+}
+
+/* videos play only while visible */
+if('IntersectionObserver' in window){
+  var vo=new IntersectionObserver(function(es){es.forEach(function(e){var v=e.target;
+    if(e.isIntersecting){if(v.dataset.rate)v.playbackRate=+v.dataset.rate;if(reduce)v.controls=true;else{var pp=v.play();if(pp&&pp.catch)pp.catch(function(){})}}else v.pause()})},{threshold:.2});
+  $$('video').forEach(function(v){vo.observe(v)});
+}
+
+/* copy email */
+var copy=$('#copy');
+copy.addEventListener('click',function(){var em=copy.getAttribute('data-email');
+  function ok(){copy.classList.add('done');setTimeout(function(){copy.classList.remove('done')},1600)}
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(em).then(ok,function(){location.href='mailto:'+em});else location.href='mailto:'+em});
+})();
+</script>
+
+<!-- the coronary tree, the dive and the flight through the artery -->
+<script type="module">
+import * as THREE from 'three';
+import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
+import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
+import {UnrealBloomPass} from 'three/addons/postprocessing/UnrealBloomPass.js';
+import {OutputPass} from 'three/addons/postprocessing/OutputPass.js';
+
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SNAP=/[?&]snap/.test(location.search);
+const small=innerWidth<861;
+const canvas=document.getElementById('gl');
+let renderer;
+try{renderer=new THREE.WebGLRenderer({canvas,antialias:false,powerPreference:'high-performance'})}catch(e){throw e}
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,small?1.5:1.75));
+renderer.setClearColor(0x04060a,1);
+
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.3,6000);
+
+/* ── seeded random ── */
+let seed=11;const R=()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+
+/* ── tube with tapering radius and a "distance from the ostium" attribute ── */
+function tube(curve,segs,radial,r0,r1,d0,len){
+  const fr=curve.computeFrenetFrames(segs,false),pos=[],nor=[],ad=[],idx=[];
+  for(let i=0;i<=segs;i++){
+    const u=i/segs,P=curve.getPointAt(u),N=fr.normals[i],B=fr.binormals[i],r=r0+(r1-r0)*u;
+    for(let j=0;j<=radial;j++){
+      const a=j/radial*Math.PI*2,c=Math.cos(a),s=Math.sin(a);
+      const nx=c*N.x+s*B.x,ny=c*N.y+s*B.y,nz=c*N.z+s*B.z;
+      pos.push(P.x+r*nx,P.y+r*ny,P.z+r*nz);nor.push(nx,ny,nz);ad.push(d0+u*len);
+    }
+  }
+  for(let i=0;i<segs;i++)for(let j=0;j<radial;j++){const a=i*(radial+1)+j,b=a+radial+1;idx.push(a,b,a+1,b,b+1,a+1)}
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+  g.setAttribute('normal',new THREE.Float32BufferAttribute(nor,3));
+  g.setAttribute('aD',new THREE.Float32BufferAttribute(ad,1));
+  g.setIndex(idx);return g;
+}
+function walk(start,dir,len,step,wobble,pull){
+  const pts=[start.clone()],d=dir.clone().normalize(),base=d.clone();let p=start.clone();
+  const n=Math.max(3,Math.round(len/step));
+  for(let i=0;i<n;i++){
+    d.add(new THREE.Vector3((R()-.5)*wobble,(R()-.5)*wobble,(R()-.5)*wobble)).lerp(base,pull).normalize();
+    p=p.clone().addScaledVector(d,step);pts.push(p);
+  }
+  return new THREE.CatmullRomCurve3(pts,false,'centripetal',.5);
+}
+
+/* ── the vessel material: X-ray fresnel plus a contrast front ── */
+const U={uTime:{value:0},uInj:{value:new THREE.Vector4(-99,-99,-99,-99)},uSpeed:{value:240},uInside:{value:0},uFill:{value:0},uFog:{value:.0005}};
+const vesselMat=new THREE.ShaderMaterial({
+  uniforms:U,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide,
+  vertexShader:`attribute float aD;varying float vD;varying vec3 vN;varying vec3 vV;
+    void main(){vD=aD;vec4 mv=modelViewMatrix*vec4(position,1.);vV=mv.xyz;vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`uniform float uTime;uniform vec4 uInj;uniform float uSpeed;uniform float uInside;uniform float uFill;uniform float uFog;
+    varying float vD;varying vec3 vN;varying vec3 vV;
+    float wv(float t0){float a=uTime-t0-vD/uSpeed;return a<0.?0.:min(1.,a/.12)*exp(-max(0.,a-1.8)/1.4);}
+    float hd(float t0){float a=uTime-t0-vD/uSpeed;return (a>0.&&a<.4)?1.-a/.4:0.;}
+    void main(){
+      vec3 n=normalize(vN),v=normalize(-vV);
+      float f=1.-abs(dot(n,v)),fr=pow(f,2.4);
+      float c=max(max(wv(uInj.x),wv(uInj.y)),max(wv(uInj.z),wv(uInj.w)));c=max(c,uFill);
+      float h=max(max(hd(uInj.x),hd(uInj.y)),max(hd(uInj.z),hd(uInj.w)));
+      // seen from outside: an X-ray hologram, bright at the silhouette
+      vec3 outC=vec3(.42,.58,.78)*(fr*.6+.025);
+      outC+=vec3(1.,.62,.22)*c*(.12+.95*fr);
+      outC+=vec3(1.,.9,.72)*h*1.6*(.25+fr);
+      // seen from inside: dark wall, thin glowing rings that recede into the fog
+      float ring=pow(.5+.5*sin(vD*.29-uTime*1.6),36.);
+      float ring2=pow(.5+.5*sin(vD*.071+1.3),60.);
+      vec3 inC=vec3(.012,.018,.03)+vec3(1.,.58,.22)*ring*.5+vec3(.55,.75,1.)*ring2*.55;
+      inC+=vec3(1.,.62,.22)*c*.08+vec3(1.,.9,.72)*h*.5;
+      vec3 col=mix(outC,inC,uInside);
+      float dist=length(vV);
+      float fog=exp(-dist*uFog);
+      float nearFade=mix(1.,smoothstep(6.,60.,dist),uInside);
+      gl_FragColor=vec4(col*fog*nearFade,1.);
+    }`
+});
+
+/* ── build the tree ── */
+const tree=new THREE.Group();scene.add(tree);
+const TRUNK_LEN=820;
+const trunk=walk(new THREE.Vector3(0,260,0),new THREE.Vector3(.35,-1,.25),TRUNK_LEN,46,.32,.1);
+tree.add(new THREE.Mesh(tube(trunk,small?420:700,small?18:26,10,4.6,0,TRUNK_LEN),vesselMat));
+function branchOff(parent,plen,pd0,u,r,len,depth){
+  const P=parent.getPointAt(u),T=parent.getTangentAt(u);
+  const rnd=new THREE.Vector3(R()-.5,R()-.5,R()-.5);const Q=rnd.cross(T).normalize();
+  const ang=.75+R()*.45,dir=T.clone().multiplyScalar(Math.cos(ang)).addScaledVector(Q,Math.sin(ang)).normalize();
+  const start=P.clone().addScaledVector(dir,r*.6);
+  const c=walk(start,dir,len,30,.5,.06),d0=pd0+u*plen;
+  tree.add(new THREE.Mesh(tube(c,Math.round(len/(small?7:4.5)),small?10:14,r,r*.4,d0,len),vesselMat));
+  if(depth<2){const k=depth===0?3:2;for(let i=0;i<k;i++)branchOff(c,len,d0,.25+R()*.55,r*.55,len*(.38+R()*.25),depth+1)}
+}
+for(let i=0;i<9;i++){const u=.08+i*.1+R()*.04,rr=(10+(4.6-10)*u)*.68;branchOff(trunk,TRUNK_LEN,0,u,rr,(320+R()*200)*(1-u*.45),0)}
+// circumflex from the same root
+const cx=walk(new THREE.Vector3(0,260,0),new THREE.Vector3(-1,-.55,-.2),560,40,.38,.08);
+tree.add(new THREE.Mesh(tube(cx,small?260:420,small?14:20,8,3.6,0,560),vesselMat));
+for(let i=0;i<4;i++)branchOff(cx,560,0,.15+i*.2,5,260+R()*120,1);
+// the catheter arriving from above
+const cath=new THREE.CatmullRomCurve3([new THREE.Vector3(260,900,120),new THREE.Vector3(160,620,80),new THREE.Vector3(40,380,20),new THREE.Vector3(0,262,0)]);
+const cathMesh=new THREE.Mesh(tube(cath,80,12,5,5,-400,400),new THREE.MeshBasicMaterial({color:0x6a7f96,transparent:true,opacity:.35,blending:THREE.AdditiveBlending,depthWrite:false}));
+tree.add(cathMesh);
+
+const box=new THREE.Box3().setFromObject(tree),C=box.getCenter(new THREE.Vector3()),D=box.getSize(new THREE.Vector3()).length()*(small?.78:.62);
+// on phones the tree sits in the top half so the name stays readable
+const LOOK0=small?C.clone().add(new THREE.Vector3(0,-D*.34,0)):C.clone();
+
+/* ── trunk lookup table for the flight ── */
+const LN=1200,LP=[],LNm=[],LB=[];
+{const fr=trunk.computeFrenetFrames(LN,false);for(let i=0;i<=LN;i++){LP.push(trunk.getPointAt(i/LN));LNm.push(fr.normals[i]);LB.push(fr.binormals[i])}}
+function at(t,arr){t=Math.min(1,Math.max(0,t))*LN;const i=Math.min(LN-1,Math.floor(t)),f=t-i;return arr[i].clone().lerp(arr[i+1],f)}
+const rAt=t=>10+(4.6-10)*t;
+
+/* guidewire just ahead of the camera */
+const wireCurve=new THREE.CatmullRomCurve3(LP.filter((_,i)=>i%8===0).map((p,i)=>p.clone().addScaledVector(LNm[i*8],rAt(i*8/LN)*.42)));
+const wire=new THREE.Mesh(new THREE.TubeGeometry(wireCurve,600,.16,6,false),new THREE.MeshBasicMaterial({color:0xffe6bf,transparent:true,opacity:0,blending:THREE.AdditiveBlending,depthWrite:false}));
+scene.add(wire);
+
+/* flowing particles inside the lumen */
+const PN=small?260:520,pg=new THREE.BufferGeometry(),pp=new Float32Array(PN*3),pa=new Float32Array(PN),pseed=[];
+for(let i=0;i<PN;i++){pa[i]=.4+R()*.8;pseed.push([R(),R()*Math.PI*2,Math.sqrt(R())*.85])}
+pg.setAttribute('position',new THREE.BufferAttribute(pp,3));pg.setAttribute('aA',new THREE.BufferAttribute(pa,1));
+const PU={uOp:{value:0},uSize:{value:small?1.8:2.2}};
+const particles=new THREE.Points(pg,new THREE.ShaderMaterial({uniforms:PU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+  vertexShader:`attribute float aA;uniform float uSize;varying float vA;void main(){vA=aA;vec4 mv=modelViewMatrix*vec4(position,1.);gl_PointSize=min(26.,uSize*aA*(160./-mv.z));gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`uniform float uOp;varying float vA;void main(){float d=length(gl_PointCoord-.5);float a=smoothstep(.5,.0,d);gl_FragColor=vec4(vec3(1.,.66,.36)*a*a*uOp*vA,1.);}`}));
+particles.frustumCulled=false;scene.add(particles);
+
+/* faint scatter around the tree, like film grain in space */
+const SN=small?500:1100,sg=new THREE.BufferGeometry(),sp=new Float32Array(SN*3),sa=new Float32Array(SN);
+for(let i=0;i<SN;i++){const r=D*(.5+R()*1.6),th=R()*Math.PI*2,ph=Math.acos(2*R()-1);sp[i*3]=C.x+r*Math.sin(ph)*Math.cos(th);sp[i*3+1]=C.y+r*Math.cos(ph);sp[i*3+2]=C.z+r*Math.sin(ph)*Math.sin(th);sa[i]=.2+R()*.8}
+sg.setAttribute('position',new THREE.BufferAttribute(sp,3));sg.setAttribute('aA',new THREE.BufferAttribute(sa,1));
+const SU={uOp:{value:.6},uSize:{value:2}};
+scene.add(new THREE.Points(sg,new THREE.ShaderMaterial({uniforms:SU,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+  vertexShader:`attribute float aA;uniform float uSize;varying float vA;void main(){vA=aA;vec4 mv=modelViewMatrix*vec4(position,1.);gl_PointSize=uSize*aA*(600./-mv.z);gl_Position=projectionMatrix*mv;}`,
+  fragmentShader:`uniform float uOp;varying float vA;void main(){float d=length(gl_PointCoord-.5);float a=smoothstep(.5,.0,d);gl_FragColor=vec4(vec3(.6,.75,1.)*a*uOp*vA*.5,1.);}`})));
+
+/* ── post: bloom makes the contrast burn ── */
+const composer=new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene,camera));
+const bloomBase=small?.85:1.05;
+const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth/2,innerHeight/2),bloomBase,.6,.05);
+composer.addPass(bloom);composer.addPass(new OutputPass());
+
+function resize(){
+  const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);composer.setSize(w,h);
+  bloom.resolution.set(w/2,h/2);camera.aspect=w/h;camera.updateProjectionMatrix();measure();
+}
+
+/* ── scroll choreography ── */
+const hero=document.getElementById('hero'),inside=document.getElementById('inside'),contact=document.getElementById('contact');
+let M={};
+function measure(){
+  const H=innerHeight;
+  M.heroEnd=hero.offsetHeight*.45;
+  M.diveEnd=inside.offsetTop-H*.15;
+  M.insideEnd=contact.offsetTop-H*.55;
+  M.exitEnd=Math.min(document.documentElement.scrollHeight-H,contact.offsetTop+H*.35);
+}
+const ease=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const cl=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+let mouse={x:0,y:0},mx=0,my=0;
+addEventListener('pointermove',e=>{mouse.x=e.clientX/innerWidth-.5;mouse.y=e.clientY/innerHeight-.5},{passive:true});
+
+const camPos=new THREE.Vector3(),camLook=new THREE.Vector3(),tPos=new THREE.Vector3(),tLook=new THREE.Vector3();
+let first=true,lastY=scrollY,vel=0,cathT=0,phase='orbit',inside01=0;
+const hud=document.getElementById('hud'),rail=document.getElementById('rail'),railDot=document.getElementById('railDot'),hDepth=document.getElementById('hDepth');
+
+function orbit(t,out){
+  const th=t*.06+mx*.9,ph=.18-my*.5;
+  out.set(C.x+Math.sin(th)*Math.cos(ph)*D,C.y+Math.sin(ph)*D,C.z+Math.cos(th)*Math.cos(ph)*D);return out;
+}
+function target(t){
+  const y=scrollY;
+  const S0=at(0,LP),T0=at(.012,LP).sub(S0).normalize();
+  if(y<M.heroEnd){phase='orbit';inside01=0;orbit(t,tPos);tLook.copy(LOOK0);return}
+  if(y<M.diveEnd){
+    phase='dive';const s=ease(cl((y-M.heroEnd)/(M.diveEnd-M.heroEnd)));
+    const O=orbit(t,new THREE.Vector3()),E=S0.clone().addScaledVector(T0,-160),q=1-s;
+    tPos.set(0,0,0).addScaledVector(O,q*q).addScaledVector(E,2*q*s).addScaledVector(S0,s*s);
+    tLook.copy(LOOK0).lerp(at(.02,LP),s);inside01=cl((s-.75)/.25);return;
+  }
+  if(y<M.insideEnd){
+    phase='inside';inside01=1;cathT=cl((y-M.diveEnd)/(M.insideEnd-M.diveEnd))*.9;
+    tPos.copy(at(cathT,LP));tLook.copy(at(cathT+.02,LP));return;
+  }
+  phase='exit';const s=ease(cl((y-M.insideEnd)/(M.exitEnd-M.insideEnd)));
+  const W=new THREE.Vector3(C.x-D*.55,C.y+D*.25,C.z+D*.75);
+  tPos.copy(at(.9,LP)).lerp(W,s);tLook.copy(at(.92,LP)).lerp(C,s);inside01=1-cl(s/.25);
+  U.uFill.value=s;
+}
+
+/* ── inject ── */
+let ii=0;
+function injectNow(){const t=U.uTime.value,v=U.uInj.value;if(ii===0)v.x=t;else if(ii===1)v.y=t;else if(ii===2)v.z=t;else v.w=t;ii=(ii+1)%4}
+addEventListener('inject',injectNow);
+
+/* ── ECG on the HUD ── */
+const ecgC=document.getElementById('ecg'),ectx=ecgC.getContext('2d');
+function ecgV(p){return .12*Math.exp(-Math.pow((p-.12)/.025,2))-.14*Math.exp(-Math.pow((p-.22)/.008,2))+Math.exp(-Math.pow((p-.24)/.009,2))-.24*Math.exp(-Math.pow((p-.265)/.01,2))+.26*Math.exp(-Math.pow((p-.46)/.04,2))}
+function drawEcg(t){
+  const w=ecgC.clientWidth,h=ecgC.clientHeight;if(!w)return;
+  if(ecgC.width!==w*2){ecgC.width=w*2;ecgC.height=h*2}
+  ectx.setTransform(2,0,0,2,0,0);ectx.clearRect(0,0,w,h);
+  const span=2.4,sx=((t/span)%1)*w,base=h*.68,amp=h*.6;let pen=false;
+  ectx.strokeStyle='#5fd08f';ectx.lineWidth=1.3;ectx.beginPath();
+  for(let x=0;x<=w;x+=1.5){const dt=((sx-x+w)%w)/w*span;if(dt<.07){pen=false;continue}const y=base-ecgV(((t-dt)*1.2)%1)*amp;if(!pen){ectx.moveTo(x,y);pen=true}else ectx.lineTo(x,y)}
+  ectx.stroke();
+}
+
+/* ── loop ── */
+const clock=new THREE.Clock();
+function render(){
+  const dt=Math.min(.05,clock.getDelta()),t=U.uTime.value+=dt;
+  mx+=(mouse.x-mx)*.04;my+=(mouse.y-my)*.04;
+  const dy=scrollY-lastY;lastY=scrollY;vel+=(Math.abs(dy)/Math.max(dt,.001)-vel)*.08;
+  target(t);
+  if(first){camPos.copy(tPos);camLook.copy(tLook);first=false}
+  const k=SNAP?1:(phase==='inside'?.16:.08);
+  camPos.lerp(tPos,k);camLook.lerp(tLook,k);
+  camera.position.copy(camPos);camera.lookAt(camLook);
+  const fovT=(phase==='inside'?72:52)+Math.min(22,vel*.012);
+  camera.fov+=(fovT-camera.fov)*.08;camera.updateProjectionMatrix();
+  if(phase==='orbit')tree.rotation.y+=dt*0;  // the orbit does the turning
+  U.uInside.value+=(inside01-U.uInside.value)*(SNAP?1:.1);
+  U.uFog.value=.00045+U.uInside.value*.0065;
+  bloom.strength=bloomBase*(1-.68*U.uInside.value);
+  if(phase!=='exit')U.uFill.value*=.96;
+  PU.uOp.value=U.uInside.value;SU.uOp.value=.6*(1-U.uInside.value);
+  wire.material.opacity=U.uInside.value*.6;
+  // particles stream towards the camera
+  if(U.uInside.value>.02){
+    const ct=phase==='inside'?cathT:(phase==='exit'?.9:0);
+    for(let i=0;i<PN;i++){const s=pseed[i],tt=ct+.004+(1-((s[0]+t*.05)%1))*.09,P=at(tt,LP),N=at(tt,LNm),B=at(tt,LB),r=rAt(cl(tt))*s[2],a=s[1]+t*.4;
+      pp[i*3]=P.x+(N.x*Math.cos(a)+B.x*Math.sin(a))*r;pp[i*3+1]=P.y+(N.y*Math.cos(a)+B.y*Math.sin(a))*r;pp[i*3+2]=P.z+(N.z*Math.cos(a)+B.z*Math.sin(a))*r}
+    pg.attributes.position.needsUpdate=true;
+  }
+  // heartbeat
+  const ph=(t*1.2)%1,beat=Math.exp(-(((ph-.24)+1)%1)*9);
+  tree.scale.setScalar(1+beat*.01*(1-U.uInside.value));
+  // HUD
+  const on=phase==='inside'||(phase==='dive'&&inside01>.5);
+  hud.classList.toggle('on',on);rail.classList.toggle('on',on);
+  if(on){hDepth.textContent=Math.round(cathT*133);railDot.style.top=(cathT/.9*100).toFixed(1)+'%';drawEcg(t)}
+  composer.render();
+}
+
+if(reduce){
+  U.uFill.value=1;resize();
+  const t=0;orbit(t,camera.position);camera.lookAt(C);composer.render();
+  addEventListener('resize',()=>{resize();camera.lookAt(C);composer.render()});
+}else{
+  resize();addEventListener('resize',resize);
+  renderer.setAnimationLoop(render);
+  setTimeout(()=>window.__inject&&window.__inject(),1300);
+  let insideSeen=false,exitSeen=false;
+  setInterval(()=>{if(phase==='inside'&&!insideSeen){insideSeen=true;window.__inject()}if(phase==='exit'&&!exitSeen){exitSeen=true;window.__inject()}},400);
+}
+document.documentElement.classList.add('gl-on');
+</script>
+</body>
+</html>
