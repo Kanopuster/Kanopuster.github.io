@@ -116,7 +116,8 @@ main,footer,.nav{position:relative;z-index:2}
 /* ───────── manifesto ───────── */
 .dive{min-height:120vh;display:flex;align-items:center}
 .dive p{isolation:isolate;font-family:var(--display);font-weight:700;font-size:clamp(34px,5.6vw,84px);line-height:1.04;letter-spacing:-.035em;max-width:16ch}
-.fx .dive .w{opacity:.12;transition:opacity .15s linear}
+.dive .w{display:inline-block}
+.fx .dive .w{opacity:.12;transition:opacity .15s linear;will-change:opacity}
 .dive .w.hl{position:relative;color:var(--dye)}
 .dive .w.hl::before{content:"";position:absolute;z-index:-1;pointer-events:none;left:-.08em;right:-.08em;top:.2em;bottom:.06em;border-radius:.45em;
   background:rgba(255,184,77,.26);filter:blur(20px)}
@@ -316,7 +317,7 @@ footer a{text-decoration:none}
         <p>Three projects from the studio I co-founded. Numbers from production builds.</p>
         <div class="game">
           <div class="row">
-            <div class="thumb"><img src="glass/megaramp-poster.jpg" alt="Mega Ramp Stunt" loading="lazy" decoding="async"></div>
+            <div class="thumb"><img src="media/thumb-megaramp.webp" width="132" height="132" alt="Mega Ramp Stunt" loading="lazy" decoding="async"></div>
             <div>
               <h3>Mega Ramp Stunt</h3><p class="from">Live, web and Android</p>
               <p>A <b>custom Rigidbody controller</b> replaced the joint-based prototype, then build and frame time were cut until it ran on low-end phones.</p>
@@ -332,7 +333,7 @@ footer a{text-decoration:none}
         </div>
         <div class="game">
           <div class="row">
-            <div class="thumb"><img src="media/quarantine.avif" alt="Quarantine Zone Mobile" loading="lazy" decoding="async"></div>
+            <div class="thumb"><img src="media/thumb-quarantine.webp" width="132" height="132" alt="Quarantine Zone Mobile" loading="lazy" decoding="async"></div>
             <div>
               <h3>Quarantine Zone Mobile</h3><p class="from">Live, publisher contract</p>
               <p>Environment rebuilt with <b>mesh decimation, LODs and silhouette-preserving proxies</b>; post-processing moved into one pass.</p>
@@ -346,7 +347,7 @@ footer a{text-decoration:none}
         </div>
         <div class="game">
           <div class="row">
-            <div class="thumb"><img src="media/obby.webp" alt="Obby Island" loading="lazy" decoding="async"></div>
+            <div class="thumb"><img src="media/thumb-obby.webp" width="132" height="132" alt="Obby Island" loading="lazy" decoding="async"></div>
             <div>
               <h3>Nine games, one codebase</h3><p class="from">Live, Playgama and Yandex Games</p>
               <p>Nine standalone WebGL titles from a single Unity project, sharing <b>services, state machine and save layer</b>.</p>
@@ -489,18 +490,20 @@ if('IntersectionObserver' in window&&!reduce){
 }else $$('.card,.split.later').forEach(function(c){c.classList.add('in')});
 
 /* manifesto + nav progress */
-var prog=$('#progress'),lnks=$$('.nav .lnk'),secs=$$('main section[id]');
+var prog=$('#progress'),lnks=$$('.nav .lnk'),secs=$$('main section[id]'),secTops=[],curSec;
+/* section offsets are read once per resize, not on every scroll frame (that forced a layout each time) */
+function measureSecs(){secTops=secs.map(function(s){return s.getBoundingClientRect().top+scrollY})}
 function frame(){
   var H=innerHeight,max=root.scrollHeight-H;
   prog.style.transform='scaleX('+(max>0?clamp(scrollY/max,0,1):0).toFixed(4)+')';
   var r=man.getBoundingClientRect();
   if(!reduce&&r.bottom>-H*.2&&r.top<H*1.2){var p=clamp((H*.85-r.top)/(r.height+H*.25),0,1),n=words.length;
     for(var i=0;i<n;i++){var a=(.12+.88*clamp(p*n*1.1-i,0,1)).toFixed(3);if(words[i]._a!==a){words[i]._a=a;words[i].style.opacity=a}}}
-  var y=scrollY+H*.45,cur=null;secs.forEach(function(s){if(s.offsetTop<=y)cur=s.id});
-  lnks.forEach(function(l){if(l.getAttribute('href')==='#'+cur)l.setAttribute('aria-current','true');else l.removeAttribute('aria-current')});
+  var y=scrollY+H*.45,cur=null;for(var k=0;k<secTops.length;k++)if(secTops[k]<=y)cur=secs[k].id;
+  if(cur!==curSec){curSec=cur;lnks.forEach(function(l){if(l.getAttribute('href')==='#'+cur)l.setAttribute('aria-current','true');else l.removeAttribute('aria-current')})}
 }
 var tick=false;addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(function(){tick=false;frame()})}},{passive:true});
-addEventListener('resize',frame);frame();
+addEventListener('resize',function(){measureSecs();frame()});addEventListener('load',function(){measureSecs();frame()});measureSecs();frame();
 
 /* inject: the 3D layer listens; the HUD counts millilitres */
 var ml=0;
@@ -552,7 +555,7 @@ const Q=new URLSearchParams(location.search);
 const canvas=document.getElementById('gl');
 let renderer;
 try{renderer=new THREE.WebGLRenderer({canvas,antialias:false,powerPreference:'high-performance'})}catch(e){throw e}
-const BUDGET=1.2e6;
+const BUDGET=4e6;
 function budgetDpr(){const d=Math.min(devicePixelRatio||1,1.5);return Math.max(.5,Math.min(d,Math.sqrt(BUDGET/(innerWidth*innerHeight))))}
 let DPR_MAX=Q.has('dpr')?+Q.get('dpr'):budgetDpr();
 let dprScale=1,useBloom=!Q.has('nobloom'),slowSecs=0;renderer.setPixelRatio(DPR_MAX);
@@ -629,20 +632,21 @@ const tree=new THREE.Group();scene.add(tree);
 const GEOS=[];
 const TRUNK_LEN=820;
 const trunk=walk(new THREE.Vector3(0,260,0),new THREE.Vector3(.35,-1,.25),TRUNK_LEN,46,.32,.1);
-GEOS.push(tube(trunk,420,18,10,4.6,0,TRUNK_LEN));
+const HI=!small;
+GEOS.push(tube(trunk,HI?800:420,HI?28:18,10,4.6,0,TRUNK_LEN));
 function branchOff(parent,plen,pd0,u,r,len,depth){
   const P=parent.getPointAt(u),T=parent.getTangentAt(u);
   const rnd=new THREE.Vector3(R()-.5,R()-.5,R()-.5);const Q=rnd.cross(T).normalize();
   const ang=.75+R()*.45,dir=T.clone().multiplyScalar(Math.cos(ang)).addScaledVector(Q,Math.sin(ang)).normalize();
   const start=P.clone().addScaledVector(dir,r*.6);
   const c=walk(start,dir,len,30,.5,.06),d0=pd0+u*plen;
-  GEOS.push(tube(c,Math.round(len/7),10,r,r*.4,d0,len));
+  GEOS.push(tube(c,Math.round(len/(HI?4:7)),HI?16:10,r,r*.4,d0,len));
   if(depth<2){const k=depth===0?3:2;for(let i=0;i<k;i++)branchOff(c,len,d0,.25+R()*.55,r*.55,len*(.38+R()*.25),depth+1)}
 }
 for(let i=0;i<9;i++){const u=.08+i*.1+R()*.04,rr=(10+(4.6-10)*u)*.68;branchOff(trunk,TRUNK_LEN,0,u,rr,(320+R()*200)*(1-u*.45),0)}
 // circumflex from the same root
 const cx=walk(new THREE.Vector3(0,260,0),new THREE.Vector3(-1,-.55,-.2),560,40,.38,.08);
-GEOS.push(tube(cx,260,14,8,3.6,0,560));
+GEOS.push(tube(cx,HI?460:260,HI?22:14,8,3.6,0,560));
 for(let i=0;i<4;i++)branchOff(cx,560,0,.15+i*.2,5,260+R()*120,1);
 tree.add(new THREE.Mesh(mergeGeometries(GEOS,false),vesselMat));GEOS.forEach(g=>g.dispose());
 // the catheter arriving from above
@@ -722,6 +726,8 @@ addEventListener('pointermove',e=>{mouse.x=e.clientX/innerWidth-.5;mouse.y=e.cli
 
 const camPos=new THREE.Vector3(),camLook=new THREE.Vector3(),tPos=new THREE.Vector3(),tLook=new THREE.Vector3();
 let first=true,lastY=scrollY,vel=0,cathT=0,phase='orbit',inside01=0;
+let hudOn=null,hudDepth=-1,hudRail=-1,ecgTick=0,railH=0;
+addEventListener('resize',()=>{railH=rail.clientHeight});setTimeout(()=>{railH=rail.clientHeight},0);
 const hud=document.getElementById('hud'),rail=document.getElementById('rail'),railDot=document.getElementById('railDot'),hDepth=document.getElementById('hDepth');
 
 const W_EXIT=new THREE.Vector3(C.x-D*.55,C.y+D*.25,C.z+D*.75);
@@ -770,19 +776,28 @@ const clock=new THREE.Clock();
 let ftAcc=0,ftN=0,ftT=0;
 function setBloom(on){useBloom=on;U.uGain.value=on?1:1.7}
 if(!useBloom)setBloom(false);
-let ftLong=0,warm=0,okWins=0;
+let ftLong=0,warm=0,okWins=0,badWins=0,ceiling=1,recovered=false;
 function adapt(raw){
   if(warm<1.5){warm+=raw;return}                 // ignore start-up and shader compiles
   ftAcc+=raw;ftN++;ftT+=raw;if(raw>.022)ftLong++;  // a frame that missed a 60 Hz vsync
   if(ftT<.5)return;
   const avg=ftAcc/ftN,longR=ftLong/ftN;ftAcc=ftN=ftT=ftLong=0;
   const was=dprScale;
+  // only sustained slowness counts: three bad half-second windows in a row, not a hitch from scrolling or a video starting
   // tier 1: fewer pixels; tier 2: drop the bloom passes and brighten the vessels instead
-  if(avg>.0185||longR>.08){
+  if(avg>.0185||longR>.12){
     okWins=0;
-    if(dprScale>.6)dprScale=Math.max(.6,dprScale-.12);
-    else if(useBloom&&++slowSecs>=2)setBloom(false);
-  }else{slowSecs=0;if(avg<.012&&longR===0&&++okWins>=6&&dprScale<1){okWins=0;dprScale=Math.min(1,dprScale+.06)}}
+    if(++badWins>=3){
+      badWins=0;
+      // a level that struggles again after we climbed back to it becomes the ceiling
+      if(dprScale>.6){if(recovered)ceiling=Math.min(ceiling,dprScale-.01);recovered=false;dprScale=Math.max(.6,dprScale-.12)}
+      else if(useBloom)setBloom(false);
+    }
+  }else{
+    badWins=0;
+    // ~4 s of clean frames: step back up, but never to a level that already struggled
+    if(longR===0&&++okWins>=8&&dprScale<ceiling){okWins=0;dprScale=Math.min(ceiling,dprScale+.06);recovered=true}
+  }
   if(was!==dprScale)resize();
 }
 function render(){
@@ -821,8 +836,13 @@ function render(){
   tree.scale.setScalar(1+beat*.01*(1-U.uInside.value));
   // HUD
   const on=phase==='inside'||(phase==='dive'&&inside01>.5);
-  hud.classList.toggle('on',on);rail.classList.toggle('on',on);
-  if(on){hDepth.textContent=Math.round(cathT*133);railDot.style.top=(cathT/.9*100).toFixed(1)+'%';drawEcg(t)}
+  // touch the DOM only when something actually changed: no style or layout work on a steady frame
+  if(on!==hudOn){hudOn=on;hud.classList.toggle('on',on);rail.classList.toggle('on',on)}
+  if(on){
+    const dep=Math.round(cathT*133);if(dep!==hudDepth){hudDepth=dep;hDepth.textContent=dep}
+    const ry=Math.round(cathT/.9*railH);if(ry!==hudRail){hudRail=ry;railDot.style.transform='translate3d(0,'+ry+'px,0)'}
+    if((ecgTick^=1))drawEcg(t);   // the trace is readable at 30 fps; halves the 2D canvas uploads
+  }
   if(useBloom)composer.render();else renderer.render(scene,camera);
 }
 
